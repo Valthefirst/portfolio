@@ -22,14 +22,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: computer_alerts-fe/package-lock.json
+        cache-dependency-path: frontend/package-lock.json
     - name: Install dependencies
       run: npm install
-      working-directory: ./computer_alerts-fe
+      working-directory: ./frontend
     - name: Run npm lint to ensure frontend code is linted
       run: npm run lint
-      working-directory: ./computer_alerts-fe
+      working-directory: ./frontend
     - name: Run build to ensure no build errors and ignore minor warnings
       run: |
         CI=false npm run build || true
-      working-directory: ./computer_alerts-fe
+      working-directory: ./frontend
