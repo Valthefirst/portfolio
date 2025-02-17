@@ -55,8 +55,7 @@ async def hello(request: Request):
     "/projects",
     response_description="List all projects",
     response_model=models.ProjectCollection,
-    response_model_by_alias=False,
-)
+    response_model_by_alias=False)
 async def list_projects():
     return models.ProjectCollection(projects=await main.projects_collection.find().to_list())
 
@@ -117,6 +116,158 @@ async def delete_project(request: Request, project_id: str):
         return Response(status_code=204)
 
     raise HTTPException(status_code=404, detail=f"Project {project_id} not found")
+
+
+@router.get(
+    "/experiences",
+    response_description="List all experiences",
+    response_model=models.ExperienceCollection,
+    response_model_by_alias=False)
+async def list_experiences():
+    return models.ExperienceCollection(experiences=await main.experiences_collection.find().to_list())
+
+
+# @router.get("/experiences/{experience_id}",
+#             response_description="Get a single experience",
+#             response_model=models.ExperienceModel,
+#             response_model_by_alias=False)
+# async def get_experience(experience_id: str):
+#     if (
+#             experience := await main.experiences_collection.find_one({"experienceId": experience_id})
+#     ) is not None:
+#         return experience
+#
+#     raise HTTPException(status_code=404, detail=f"Experience {experience_id} not found")
+
+
+@router.post("/experiences",
+             response_description="Add new experience",
+             response_model=models.ExperienceModel,
+             status_code=201,
+             response_model_by_alias=False)
+async def create_experience(request: Request, experience: models.ExperienceModel):
+    await verify_token(request)
+    experience.experienceId = str(uuid.uuid4())
+    await main.experiences_collection.insert_one(experience.model_dump())
+    return experience
+
+
+@router.put("/experiences/{experience_id}",
+            response_description="Update an experience",
+            response_model=models.ExperienceModel,
+            response_model_by_alias=False)
+async def update_experience(request: Request, experience_id: str, experience: models.UpdateExperienceModel):
+    await verify_token(request)
+    if (
+            existing_experience := await main.experiences_collection.find_one({"experienceId": experience_id})
+    ) is not None:
+        # If the update is empty, we should still return the matching document:
+        if experience.dict(exclude_unset=True) == {}:
+            return existing_experience
+
+        updated_experience = {**existing_experience, **experience.dict()}
+        await main.experiences_collection.update_one({"experienceId": experience_id}, {"$set": updated_experience})
+        return updated_experience
+
+    raise HTTPException(status_code=404, detail=f"Experience {experience_id} not found")
+
+
+@router.delete("/experiences/{experience_id}",
+               response_description="Delete experience",
+               status_code=204)
+async def delete_experience(request: Request, experience_id: str):
+    await verify_token(request)
+    delete_result = await main.experiences_collection.delete_one({"experienceId": experience_id})
+
+    if delete_result.deleted_count == 1:
+        return Response(status_code=204)
+
+    raise HTTPException(status_code=404, detail=f"Experience {experience_id} not found")
+
+
+@router.get(
+    "/comments",
+    response_description="List all comments",
+    response_model=models.CommentCollection,
+    response_model_by_alias=False)
+async def list_comments():
+    return models.CommentCollection(comments=await main.comments_collection.find().to_list())
+
+
+# @router.get("/comments/{comment_id}",
+#             response_description="Get a single comment",
+#             response_model=models.CommentModel,
+#             response_model_by_alias=False)
+# async def get_comment(comment_id: str):
+#     if (
+#             comment := await main.comments_collection.find_one({"commentId": comment_id})
+#     ) is not None:
+#         return comment
+#
+#     raise HTTPException(status_code=404, detail=f"Comment {comment_id} not found")
+
+
+@router.post("/comments",
+             response_description="Add new comment",
+             response_model=models.CommentModel,
+             status_code=201,
+             response_model_by_alias=False)
+async def create_comment(comment: models.CommentModel):
+    comment.commentId = str(uuid.uuid4())
+    await main.comments_collection.insert_one(comment.model_dump())
+    return comment
+
+
+@router.put("/comments/{comment_id}",
+            response_description="Update a comment",
+            response_model=models.CommentModel,
+            response_model_by_alias=False)
+async def update_comment(request: Request, comment_id: str, comment: models.UpdateCommentModel):
+    await verify_token(request)
+    if (
+            existing_comment := await main.comments_collection.find_one({"commentId": comment_id})
+    ) is not None:
+        # If the update is empty, we should still return the matching document:
+        if comment.dict(exclude_unset=True) == {}:
+            return existing_comment
+
+        updated_comment = {**existing_comment, **comment.dict()}
+        await main.comments_collection.update_one({"commentId": comment_id}, {"$set": updated_comment})
+        return updated_comment
+
+    raise HTTPException(status_code=404, detail=f"Comment {comment_id} not found")
+
+
+@router.delete("/comments/{comment_id}",
+               response_description="Delete comment",
+               status_code=204)
+async def delete_comment(request: Request, comment_id: str):
+    await verify_token(request)
+    delete_result = await main.comments_collection.delete_one({"commentId": comment_id})
+
+    if delete_result.deleted_count == 1:
+        return Response(status_code=204)
+
+    raise HTTPException(status_code=404, detail=f"Comment {comment_id} not found")
+
+
+@router.get(
+    "/me",
+    response_description="Get personal information",
+    response_model=models.MeModel,
+    response_model_by_alias=False)
+async def get_me():
+    return await main.me_collection.find_one()
+
+
+@router.put("/me",
+            response_description="Update personal information",
+            response_model=models.MeModel,
+            response_model_by_alias=False)
+async def update_me(request: Request, me: models.MeModel):
+    await verify_token(request)
+    updated_me = await main.me_collection.find_one_and_update({}, {"$set": me.dict()})
+    return updated_me
 
 
 async def verify_token(request: Request):

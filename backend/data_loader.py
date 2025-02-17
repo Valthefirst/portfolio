@@ -76,7 +76,9 @@ async def load_project_data():
             "company": "CIUSSS de l'Ouest-de-l'Île-de-Montréal",
             "location": "Montreal, QC",
             "date": "March 2025 - May 2025",
-            "description": "Helped system users of Saint-Mary's Hospital with technical issues and provided support."
+            "descriptions": [
+                "Helped system users of Saint-Mary's Hospital with technical issues and provided support."
+            ]
         },
         {
             "experienceId": "f8d91257-fc69-40ca-8940-93350747330e",
@@ -84,12 +86,12 @@ async def load_project_data():
             "company": "La Ronde",
             "location": "Montreal, QC",
             "date": "August 2021 - Present",
-            "description": {
-                "desc1": "Take orders and serve clients in a fast paced environment",
-                "desc2": "Process orders with computerized cash registers",
-                "desc3": "Train new employees on the menu and customer service",
-                "desc4": "Guide, inform and answer questions from visitors"
-            },
+            "descriptions": [
+                "Take orders and serve clients in a fast paced environment.",
+                "Process orders with computerized cash registers.",
+                "Train new employees on the menu and customer service.",
+                "Guide, inform and answer questions from visitors."
+            ]
         }
     ]
 
