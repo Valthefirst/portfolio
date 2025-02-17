@@ -1,0 +1,22 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: "class",
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        burtons: "burtons",
+      },
+      colors: {
+        light: {
+          DEFAULT: '#ffffff', 
+          text: '#000000', 
+        },
+      },
+    },
+  },
+  plugins: [],
+}

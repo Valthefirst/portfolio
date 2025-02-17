@@ -1,12 +1,18 @@
-FROM gradle:7.6 as builder
-WORKDIR /usr/src/app
-COPY src ./src
-COPY build.gradle .
-RUN ["gradle", "bootJar"]
+# Base image
+FROM python:3.11-slim
 
-EXPOSE 8080
+# Set working directory
+WORKDIR /app
 
-FROM openjdk:17
-ARG JAR_FILE=build/libs/*.jar
-COPY --from=builder /usr/src/app/${JAR_FILE} app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Expose port for FastAPI
+EXPOSE 8000
+
+# Run the app with Uvicorn
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
