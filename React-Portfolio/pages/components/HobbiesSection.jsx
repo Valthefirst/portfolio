@@ -13,6 +13,7 @@ const HobbiesSection = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [modifiedHobby, setModifiedHobby] = useState({ hobby: "", description: "", image: "" });
   const [newHobby, setNewHobby] = useState({ hobby: "", description: "", image: "" });
+  const [originalHobbyName, setOriginalHobbyName] = useState("");
 
   // Wait for translations to be ready
   useEffect(() => {
@@ -71,23 +72,44 @@ const HobbiesSection = () => {
   const handleDelete = async (hobby) => {
     try {
       const token = sessionStorage.getItem('token');
-      // Create a new hobbies object without the deleted hobby
-      const updatedHobbies = { ...hobbies };
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+  
+      // First GET the current profile data
+      const getResponse = await fetch('https://portfolio-u292.onrender.com/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      if (!getResponse.ok) throw new Error('Failed to fetch current profile');
+      const currentProfile = await getResponse.json();
+  
+      // Create a copy of the current hobbies and delete the selected one
+      const updatedHobbies = { ...currentProfile.hobbies };
       delete updatedHobbies[hobby];
-
-      // PUT the updated hobbies to your backend
-      const response = await fetch('https://portfolio-u292.onrender.com/me', {
+  
+      // Create updated profile with new hobbies
+      const updatedProfile = {
+        ...currentProfile,
+        hobbies: updatedHobbies
+      };
+  
+      // Send PUT request with full updated profile
+      const putResponse = await fetch('https://portfolio-u292.onrender.com/me', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ hobbies: updatedHobbies }),
+        body: JSON.stringify(updatedProfile),
       });
-
-      if (response.ok) {
+  
+      if (putResponse.ok) {
         console.log('Hobby deleted successfully');
-        setHobbies(updatedHobbies);
+        setHobbies(updatedHobbies); // Update local state
       } else {
         console.error('Error deleting hobby');
       }
@@ -98,6 +120,7 @@ const HobbiesSection = () => {
 
   // Open modify modal and populate with the hobby data
   const handleModify = (hobby) => {
+    setOriginalHobbyName(hobby); // Store original name
     setModifiedHobby({ hobby, ...hobbies[hobby] });
     setIsModifyModalOpen(true);
   };
@@ -106,30 +129,48 @@ const HobbiesSection = () => {
   const handleSaveModify = async () => {
     try {
       const token = sessionStorage.getItem('token');
-      // Create an updated hobbies object.
-      // Note: If the hobby name is changed, the old key will still exist.
-      const updatedHobbies = { 
-        ...hobbies, 
-        [modifiedHobby.hobby]: { 
-          description: modifiedHobby.description, 
-          image: modifiedHobby.image 
-        } 
+      if (!token) return;
+  
+      // Get current profile
+      const getResponse = await fetch('https://portfolio-u292.onrender.com/me', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const currentProfile = await getResponse.json();
+  
+      // Create copy of hobbies
+      const updatedHobbies = { ...currentProfile.hobbies };
+  
+      // If name changed, delete old entry
+      if (originalHobbyName !== modifiedHobby.hobby) {
+        delete updatedHobbies[originalHobbyName];
+      }
+  
+      // Add/update the (potentially renamed) hobby
+      updatedHobbies[modifiedHobby.hobby] = {
+        description: modifiedHobby.description,
+        image: modifiedHobby.image
       };
-      const response = await fetch('https://portfolio-u292.onrender.com/me', {
+  
+      // Update full profile
+      const updatedProfile = {
+        ...currentProfile,
+        hobbies: updatedHobbies
+      };
+  
+      // Send PUT request
+      const putResponse = await fetch('https://portfolio-u292.onrender.com/me', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ hobbies: updatedHobbies }),
+        body: JSON.stringify(updatedProfile),
       });
-
-      if (response.ok) {
-        console.log('Hobby updated successfully');
-        setIsModifyModalOpen(false);
+  
+      if (putResponse.ok) {
         setHobbies(updatedHobbies);
-      } else {
-        console.error('Error updating hobby');
+        setIsModifyModalOpen(false);
+        setOriginalHobbyName(""); // Reset original name
       }
     } catch (error) {
       console.error('Error updating hobby:', error);
@@ -145,28 +186,49 @@ const HobbiesSection = () => {
   const handleSaveNewHobby = async () => {
     try {
       const token = sessionStorage.getItem('token');
-      // Append the new hobby to the current hobbies object
-      const updatedHobbies = { 
-        ...hobbies, 
-        [newHobby.hobby]: { 
-          description: newHobby.description, 
-          image: newHobby.image 
-        } 
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+  
+      // First GET the current profile data
+      const getResponse = await fetch('https://portfolio-u292.onrender.com/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      if (!getResponse.ok) throw new Error('Failed to fetch current profile');
+      const currentProfile = await getResponse.json();
+  
+      // Create a copy of the current hobbies and add the new hobby
+      const updatedHobbies = { ...currentProfile.hobbies };
+      updatedHobbies[newHobby.hobby] = {
+        description: newHobby.description,
+        image: newHobby.image,
       };
-      const response = await fetch('https://portfolio-u292.onrender.com/me', {
+  
+      // Create updated profile with new hobbies
+      const updatedProfile = {
+        ...currentProfile,
+        hobbies: updatedHobbies,
+      };
+  
+      // Send PUT request with full updated profile
+      const putResponse = await fetch('https://portfolio-u292.onrender.com/me', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ hobbies: updatedHobbies }),
+        body: JSON.stringify(updatedProfile),
       });
-
-      if (response.ok) {
+  
+      if (putResponse.ok) {
         console.log('Hobby added successfully');
-        setIsAddModalOpen(false);
-        setHobbies(updatedHobbies);
-        setNewHobby({ hobby: "", description: "", image: "" });
+        setIsAddModalOpen(false); // Close the modal
+        setHobbies(updatedHobbies); // Update local state
+        setNewHobby({ hobby: "", description: "", image: "" }); // Reset the form
       } else {
         console.error('Error adding hobby');
       }
@@ -202,7 +264,7 @@ const HobbiesSection = () => {
                 <p className="text-sm">{description}</p>
                 {isLoggedIn && (
                   <div className="mt-4">
-                    {/* <button 
+                    <button 
                       onClick={() => handleModify(hobby)} 
                       className="mr-2 bg-blue-500 text-white px-4 py-2 rounded"
                     >
@@ -213,7 +275,7 @@ const HobbiesSection = () => {
                       className="bg-red-500 text-white px-4 py-2 rounded"
                     >
                       Delete
-                    </button> */}
+                    </button>
                   </div>
                 )}
               </div>
@@ -223,12 +285,12 @@ const HobbiesSection = () => {
       </div>
       {isLoggedIn && (
         <div className="mt-4 text-center">
-          {/* <button 
+          <button 
             onClick={handleAddHobby} 
             className="bg-green-500 text-white px-4 py-2 rounded"
           >
             Add Hobby
-          </button> */}
+          </button>
         </div>
       )}
 
