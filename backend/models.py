@@ -105,27 +105,27 @@ class UpdateMeModel(BaseModel):
     email: Optional[str] = None
 
 
-class SkillModel(BaseModel):
-    name: str = Field(...)
-    image: str = Field(...)
-
-
-class SkillsCategoryModel(BaseModel):
-    Software_Development_Tools: Dict[str, SkillModel] = Field(...)
-    Databases: Dict[str, SkillModel] = Field(...)
-    Programming_Languages: Dict[str, SkillModel] = Field(...)
-    Frameworks: Dict[str, SkillModel] = Field(...)
-    Operating_Systems: Dict[str, SkillModel] = Field(...)
-    Cloud_based_productivity_tools: Dict[str, SkillModel] = Field(...)
-
-
-class UpdateSkillsCategoryModel(BaseModel):
-    Software_Development_Tools: Optional[Dict[str, SkillModel]] = None
-    Databases: Optional[Dict[str, SkillModel]] = None
-    Programming_Languages: Optional[Dict[str, SkillModel]] = None
-    Frameworks: Optional[Dict[str, SkillModel]] = None
-    Operating_Systems: Optional[Dict[str, SkillModel]] = None
-    Cloud_based_productivity_tools: Optional[Dict[str, SkillModel]] = None
+# class SkillModel(BaseModel):
+#     name: str = Field(...)
+#     image: str = Field(...)
+#
+#
+# class SkillsCategoryModel(BaseModel):
+#     Software_Development_Tools: Dict[str, SkillModel] = Field(...)
+#     Databases: Dict[str, SkillModel] = Field(...)
+#     Programming_Languages: Dict[str, SkillModel] = Field(...)
+#     Frameworks: Dict[str, SkillModel] = Field(...)
+#     Operating_Systems: Dict[str, SkillModel] = Field(...)
+#     Cloud_based_productivity_tools: Dict[str, SkillModel] = Field(...)
+#
+#
+# class UpdateSkillsCategoryModel(BaseModel):
+#     Software_Development_Tools: Optional[Dict[str, SkillModel]] = None
+#     Databases: Optional[Dict[str, SkillModel]] = None
+#     Programming_Languages: Optional[Dict[str, SkillModel]] = None
+#     Frameworks: Optional[Dict[str, SkillModel]] = None
+#     Operating_Systems: Optional[Dict[str, SkillModel]] = None
+#     Cloud_based_productivity_tools: Optional[Dict[str, SkillModel]] = None
 
 
 class ProjectCollection(BaseModel):
@@ -150,5 +150,5 @@ class MeCollection(BaseModel):
     me: List[MeModel]
 
 
-class SkillsCollection(BaseModel):
-    skills: List[SkillsCategoryModel]
+# class SkillsCollection(BaseModel):
+#     skills: List[SkillsCategoryModel]

@@ -6,11 +6,13 @@ import { AiFillLinkedin, AiFillGithub, AiFillMail } from "react-icons/ai";
 const EmailSection = () => {
   const { t, ready } = useTranslation();
   const [contentReady, setContentReady] = useState(false);
-  const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [githubUrl, setGithubUrl] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [profileData, setProfileData] = useState({});
 
   useEffect(() => {
     if (ready) {
@@ -21,13 +23,13 @@ const EmailSection = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/me");
+        const response = await fetch("https://portfolio-u292.onrender.com/me");
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         setGithubUrl(data.github);
         setLinkedinUrl(data.linkedin);
         setEmail(data.email);
-        
+        setProfileData(data);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       } finally {
@@ -37,6 +39,61 @@ const EmailSection = () => {
 
     fetchProfileData();
   }, []);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const token = sessionStorage.getItem('token');
+      if (!token) return;
+
+      try {
+        const response = await fetch('https://portfolio-u292.onrender.com/hi', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.message) {
+            setIsLoggedIn(true);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
+
+  const handleEdit = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleSave = async () => {
+    try {
+      const token = sessionStorage.getItem('token');
+      const updatedProfileData = { ...profileData, github: githubUrl, linkedin: linkedinUrl, email };
+      const response = await fetch('https://portfolio-u292.onrender.com/me', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedProfileData),
+      });
+
+      if (response.ok) {
+        console.log('Profile updated successfully');
+        setIsModalOpen(false);
+      } else {
+        console.error('Error updating profile');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
 
   if (!contentReady || isLoading) {
     return <div>Loading...</div>;
@@ -65,7 +122,51 @@ const EmailSection = () => {
             </a>
           ))}
         </div>
+        {isLoggedIn && (
+          <div className="mt-4">
+            <button onClick={handleEdit} className="bg-blue-500 text-white px-4 py-2 rounded">
+              Modify
+            </button>
+          </div>
+        )}
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full space-y-4">
+            <h3 className="text-lg leading-6 font-medium text-gray-900">Modify Contact Information</h3>
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded"
+              value={linkedinUrl}
+              onChange={(e) => setLinkedinUrl(e.target.value)}
+              placeholder="LinkedIn URL"
+            />
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded"
+              value={githubUrl}
+              onChange={(e) => setGithubUrl(e.target.value)}
+              placeholder="GitHub URL"
+            />
+            <input
+              type="email"
+              className="w-full p-2 border border-gray-300 rounded"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+            />
+            <div className="mt-4">
+              <button onClick={handleSave} className="mr-2 bg-blue-500 text-white px-4 py-2 rounded">
+                Save
+              </button>
+              <button onClick={() => setIsModalOpen(false)} className="bg-gray-500 text-white px-4 py-2 rounded">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
