@@ -2,23 +2,34 @@ import uvicorn
 import os
 from dotenv import load_dotenv
 
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import Response
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from firebase_admin import credentials
 from pyrebase import pyrebase
 
-from data_loader import load_project_data
 import firebase_admin
 import motor.motor_asyncio
 
-import models
-import uuid
 from router import router
 
 app = FastAPI(
     title="Portfolio Backend",
     description="This is the backend for my portfolio that will handle auth and requests",
     docs_url="/"
+)
+
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    "http://localhost:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 load_dotenv()

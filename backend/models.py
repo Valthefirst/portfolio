@@ -21,7 +21,6 @@ class ProjectModel(BaseModel):
     description: str = Field(...)
     date: str = Field(...)
     link: str = Field(...)
-    image: str = Field(...)
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
     )
@@ -32,7 +31,6 @@ class UpdateProjectModel(BaseModel):
     description: Optional[str] = None
     date: Optional[str] = None
     link: Optional[str] = None
-    image: Optional[str] = None
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
     )

@@ -1,48 +1,57 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useTranslation } from 'next-i18next';
-const WorkExperience = () => {
-    const { t, ready } = useTranslation();
-  const [contentReady, setContentReady] = useState(false);
-  
-  useEffect(() => {
-    if (ready) {
-      setContentReady(true);
-    }
-  }, [ready]);
 
-  if (!contentReady) {
-    return <div>Loading...</div>; // Or any other placeholder content
+const WorkExperience = () => {
+  const [experiences, setExperiences] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchExperiences = async () => {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/experiences');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        setExperiences(data.experiences);
+      } catch (error) {
+        console.error('Error fetching experiences:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchExperiences();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
   }
-    
 
   return (
     <section id="work" className="py-12 px-4 mb-6">
-    <h2 className="text-center text-4xl font-bold text-gray-800 dark:text-white mt-4 mb-8">
-      {t(`workExperience.title`)}
-    </h2>
-    <div className="container mx-auto">
-      <div className="timeline">
-        
-        {[1].map((num) => (
-          <div key={num} className="timeline-item">
-            <div className="timeline-marker"></div>
-            <div className="timeline-content bg-white dark:bg-[#222222] rounded-lg p-4 hover:scale-105 transition-transform duration-300 ease-in-out shadow-lg">
-              <div className="font-bold dark:text-white">{t(`workExperience.experience${num}.date`)}</div>
-              <div className="font-semibold dark:text-gray-300">{t(`workExperience.experience${num}.company`)}</div>
-              <div className="font-medium dark:text-gray-400">{t(`workExperience.experience${num}.role`)}</div>
-              <ul className="list-disc list-inside dark:text-gray-200">
-                {[...Array(3).keys()].map(i => (
-                  t(`workExperience.experience${num}.responsibility${i + 1}`) && <li key={i}>{t(`workExperience.experience${num}.responsibility${i + 1}`)}</li>
-                ))}
-              </ul>
+      <h2 className="text-center text-4xl font-bold text-gray-800 dark:text-white mt-4 mb-8">
+        Work Experience
+      </h2>
+      <div className="container mx-auto">
+        <div className="timeline">
+          {experiences.map((experience) => (
+            <div key={experience.experienceId} className="timeline-item">
+              <div className="timeline-marker"></div>
+              <div className="timeline-content bg-white dark:bg-[#222222] rounded-lg p-4 hover:scale-105 transition-transform duration-300 ease-in-out shadow-lg">
+                <div className="font-bold dark:text-white">{experience.date}</div>
+                <div className="font-semibold dark:text-gray-300">{experience.company}</div>
+                <div className="font-medium dark:text-gray-400">{experience.title}</div>
+                <ul className="list-disc list-inside dark:text-gray-200">
+                  {experience.descriptions.map((description, index) => (
+                    <li key={index}>{description}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
   );
 };
-  
-  export default WorkExperience;
+
+export default WorkExperience;

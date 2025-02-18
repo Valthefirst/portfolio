@@ -22,7 +22,7 @@ async def load_project_data():
             "description": "A portfolio website that showcases my projects and skills.",
             "date": "September 2024 - February 2025",
             "link": "x.com",
-            "image": "d"
+            # "image": "d"
         },
         {
             "projectId": "42b3c7e2-2f05-4829-9e02-9f78560dadb4",
@@ -30,7 +30,7 @@ async def load_project_data():
             "description": "A weather app that shows the current weather for your location or a searched one.",
             "date": "November 2024 - December 2024",
             "link": "x.com",
-            "image": "d"
+            # "image": "d"
         },
         {
             "projectId": "184181c4-2ecd-4663-8c71-7cc105ab759d",
@@ -39,7 +39,7 @@ async def load_project_data():
                            "books.",
             "date": "February 2024 - May 2024",
             "link": "https://github.com/Valthefirst/library-management-system",
-            "image": "d"
+            # "image": "d"
         },
         {
             "projectId": "bd6884f3-26da-4227-bd5b-512123e140ee",
@@ -48,7 +48,7 @@ async def load_project_data():
                            "books.",
             "date": "September 2023 - December 2023",
             "link": "https://github.com/Valthefirst/library-manager-application",
-            "image": "d"
+            # "image": "d"
         }
     ]
 

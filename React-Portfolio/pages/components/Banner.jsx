@@ -20,7 +20,7 @@ const Banner = () => {
   if (!contentReady) {
     return <div>Loading...</div>; 
   }
-  const resumeLink = i18n.language === 'fr' ? '/Valentine_Nneji_Resume_Fr.pdf' : '/Valentine_Nneji_Resume.pdf';
+  const resumeLink = i18n.language === 'fr' ? 'https://pdflink.to/ad166957/' : 'https://pdflink.to/4ef63d0b/';
   return (
     <section className="fullscreen-banner">
       <div className="video-container">

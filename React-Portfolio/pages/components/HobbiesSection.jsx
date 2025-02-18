@@ -6,79 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useTranslation } from 'next-i18next';
 import { CircularProgressbar } from 'react-circular-progressbar';
-
-const LanguageProficiency = () => {
-    const { t, ready } = useTranslation();
-  const [contentReady, setContentReady] = useState(false);
-  
-  useEffect(() => {
-    if (ready) {
-      setContentReady(true);
-    }
-  }, [ready]);
-
-  if (!contentReady) {
-    return <div>Loading...</div>; 
-  }
-    const languages = [
-      { name: "English", level: 100 },
-      { name: "French", level: 80 },
-      { name: "Italian", level: 20 }
-    ];
-  
-    return (
-      <div className="language-card">
-        <h3>{t('hobbies.languagepro')}</h3>
-        <div className="language-proficiency-container grid grid-cols-4 gap-4">
-          {languages.map(lang => (
-            <div key={lang.name} className="text-center">
-              <CircularProgressBar percentage={lang.level} />
-              <p>{lang.name}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-  
-  
-
-  const CircularProgressBar = ({ percentage }) => {
-    const radius = 36;
-    const circumference = 2 * Math.PI * radius;
-    const offset = ((100 - percentage) / 100) * circumference;
-  
-    return (
-      <div className="progress-container">
-        <svg width="100" height="100" className="progress-circle">
-          <circle
-            class="circle-bg"
-            stroke="#f3f3f3" 
-            cx="50"
-            cy="50"
-            r="36"
-            strokeWidth="3.8"
-          />
-          <circle
-            class="circle"
-            stroke="#4CAF50"  
-            cx="50"
-            cy="50"
-            r="36"
-            strokeWidth="3.8"
-            strokeDasharray={`${circumference} ${circumference}`}
-            strokeDashoffset={offset}
-            transform="rotate(-90 50 50)"
-          />
-          <text x="50" y="50" class="circle-text" dominantBaseline="middle" textAnchor="middle">
-            {percentage}%
-          </text>
-        </svg>
-      </div>
-    );
-  };
-  
-      
+ 
 
 const HobbiesSection = () => {
     const { t, ready } = useTranslation();
@@ -126,7 +54,6 @@ const HobbiesSection = () => {
             ))}
         </div>
         <div className="arrow-down"></div>
-        <LanguageProficiency />
     </section>
     );
 };
