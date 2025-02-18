@@ -21,7 +21,8 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "http://localhost:8080",
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "https://portfolio-blond-eight-32.vercel.app",
 ]
 
 app.add_middleware(
@@ -58,6 +59,7 @@ projects_collection = db["projects"]
 comments_collection = db.get_collection("comments")
 experiences_collection = db.get_collection("experiences")
 me_collection = db.get_collection("me")
+skills_collection = db.get_collection("skills")
 
 
 # @app.on_event("startup")

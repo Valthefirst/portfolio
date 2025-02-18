@@ -12,6 +12,7 @@ projects_collection = db["projects"]
 comments_collection = db.get_collection("comments")
 experiences_collection = db.get_collection("experiences")
 me_collection = db.get_collection("me")
+skills_collection = db.get_collection("skills")
 
 
 async def load_project_data():
@@ -24,14 +25,14 @@ async def load_project_data():
             "link": "x.com",
             # "image": "d"
         },
-        {
-            "projectId": "42b3c7e2-2f05-4829-9e02-9f78560dadb4",
-            "name": "Weather App",
-            "description": "A weather app that shows the current weather for your location or a searched one.",
-            "date": "November 2024 - December 2024",
-            "link": "x.com",
-            # "image": "d"
-        },
+        # {
+        #     "projectId": "42b3c7e2-2f05-4829-9e02-9f78560dadb4",
+        #     "name": "Weather App",
+        #     "description": "A weather app that shows the current weather for your location or a searched one.",
+        #     "date": "November 2024 - December 2024",
+        #     "link": "x.com",
+        #     # "image": "d"
+        # },
         {
             "projectId": "184181c4-2ecd-4663-8c71-7cc105ab759d",
             "name": "Library Management System",
@@ -101,12 +102,19 @@ async def load_project_data():
                    "genuine interest in IT Support and Software Development and I'm always eager to expand my "
                    "toolkit. I thrive on the energy and creativity that come from teamwork and working together to "
                    "solve problems.",
+            "picture": "https://i.postimg.cc/fyjj0qTR/valpic.png",
             "education": "Computer Science Technology, Champlain College, Saint-Lambert",
             "hobbies": {
-                "Cooking": "I got into cooking a while back, experimenting with different ingredients. It's my go-to "
-                           "activity for relaxation and creativity, especially with various cuisines.",
-                "Photography": "I've delved into photography, capturing moments and views that speak to me. From "
-                               "nature shots to urban landscapes, it allows me to preserve memories uniquely."
+                "Cooking": {
+                    "description": "I got into cooking a while back, experimenting with different ingredients. It's "
+                                   "my go-to activity for relaxation and creativity, especially with various cuisines.",
+                    "image": "https://i.postimg.cc/C184wL3D/pasta.jpg"
+                },
+                "Photography": {
+                    "description": "I've delved into photography, capturing moments and views that speak to me. From "
+                                   "nature shots to urban landscapes, it allows me to preserve memories uniquely.",
+                    "image": "https://i.postimg.cc/TwBHcs6j/photo4.jpg"
+                }
             },
             "github": "https://github.com/Valthefirst",
             "linkedin": "https://www.linkedin.com/in/valentine-nneji/",
@@ -114,21 +122,64 @@ async def load_project_data():
         }
     ]
 
+    skils = [
+        {
+            "Software Development Tools": {
+                "GitHub": "https://i.postimg.cc/B6kPQrWK/github-PNG47.png",
+                "Docker": "https://i.postimg.cc/nhFbMMGv/docker.png",
+                "Atlassian": "https://i.postimg.cc/tCz80pG7/jira.png",
+                "IntelliJ": "https://i.postimg.cc/pXv31y7g/intelliJ.png",
+                "VS Code": "https://i.postimg.cc/FRjDjV91/vscode.png",
+                "Windows Powershell": "https://i.postimg.cc/FRjDjV91/vscode.png"
+            },
+            "Databases": {
+                "MongoDB": "https://i.postimg.cc/t4SfTkTj/mongodb.png",
+                "MySQL": "https://i.postimg.cc/1z8dNFnN/mysql.png",
+                "PostgreSQL": "https://i.postimg.cc/T16NSHkr/postgre.jpg",
+                "Firebase": "https://i.postimg.cc/3wqPL15B/firebase.png"
+            },
+            "Programming Languages": {
+                "Python": "https://i.postimg.cc/tC9mNwnb/python.png",
+                "Java": "https://i.postimg.cc/C5T90KKn/java.png",
+                "JavaScript": "https://i.postimg.cc/GtFVm1B7/javascript.png",
+                "C#": "https://i.postimg.cc/bYkKT16x/c.png",
+                "Swift": "https://i.postimg.cc/k5Rj5dzQ/swift.jpg"
+            },
+            "Frameworks": {
+                "React": "https://i.postimg.cc/wvKwyGYS/react.png",
+                "Spring Boot": "https://i.postimg.cc/28T9cGnZ/springboot.png",
+                ".Net": "https://i.postimg.cc/RZFsjtTb/net.png",
+                "Next.js": "https://i.postimg.cc/JhS23hZY/nextjs.png"
+            },
+            "Operating Systems": {
+                "Windows": "https://i.postimg.cc/0jnn45Ks/windows.png",
+                "MacOS": "https://i.postimg.cc/HkhZHLZW/macos.png",
+                "Linux": "https://i.postimg.cc/zGX686q7/linux.png"
+            },
+            "Cloud-based productivity tools": {
+                "Google Workspace": "https://i.postimg.cc/1tNbbFyZ/google.png",
+                "Microsoft 365": "https://i.postimg.cc/qRnZ1dGJ/office365.jpg"
+            },
+
+        }
+    ]
+
     # Upsert projects (update if exists, insert if not)
     for project in projects:
-        # project["_id"] = await get_next_sequence("project_id")  # Auto-increment ID
         await projects_collection.update_one({"projectId": project["projectId"]}, {"$set": project}, upsert=True)
 
-    # Upsert projects (update if exists, insert if not)
+    # Upsert comments (update if exists, insert if not)
     for comment in comments:
-        # project["_id"] = await get_next_sequence("project_id")  # Auto-increment ID
         await comments_collection.update_one({"commentId": comment["commentId"]}, {"$set": comment}, upsert=True)
 
-    # Upsert projects (update if exists, insert if not)
+    # Upsert experience (update if exists, insert if not)
     for experience in experience:
-        # project["_id"] = await get_next_sequence("project_id")  # Auto-increment ID
         await experiences_collection.update_one({"experienceId": experience["experienceId"]}, {"$set": experience},
                                                 upsert=True)
+
+    # Upsert skills (update if exists, insert if not)
+    for skill in skils:
+        await skills_collection.update_one({}, {"$set": skill}, upsert=True)
 
     # Upsert me (update if exists, insert if not)
     for me_data in me:

@@ -270,6 +270,25 @@ async def update_me(request: Request, me: models.MeModel):
     return updated_me
 
 
+# @router.get("/skills",
+#             response_description="Get skills",
+#             response_model=models.SkillsCategoryModel,
+#             response_model_by_alias=False)
+# async def get_skills():
+#     return await main.skills_collection.find_one()
+#
+#
+# @router.put("/skills",
+#             response_description="Update skills",
+#             response_model=models.SkillsCategoryModel,
+#             response_model_by_alias=False)
+# async def update_skills(request: Request, skills: models.SkillsCategoryModel):
+#     await verify_token(request)
+#     updated_skills = await main.skills_collection.find_one_and_update({}, {"$set": skills.dict()})
+#     return updated_skills
+
+
+
 async def verify_token(request: Request):
     authorization_header = request.headers.get("authorization")
 

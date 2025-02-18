@@ -24,26 +24,6 @@ const Banner = () => {
   return (
     <section className="fullscreen-banner">
       <div className="video-container">
-        <video
-          autoPlay
-          muted
-          loop
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            width: "auto",
-            minWidth: "100%",
-            height: "auto",
-            minHeight: "100%",
-            objectFit: "cover",
-            transform: "translate(-50%, -50%)",
-            zIndex: -1
-          }}
-        >
-          <source src="skybackground.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
 
         <div className="grid grid-cols-1 sm:grid-cols-12 h-full">
           <motion.div
