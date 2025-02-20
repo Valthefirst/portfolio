@@ -22,7 +22,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 19
-          cache: 'npm'
           cache-dependency-path: React-Portfolio/package-lock.json
 
       - name: Install dependencies
