@@ -11,6 +11,7 @@ import HobbiesSection from "./components/HobbiesSection";
 import WorkExperience from './components/WorkExperience';
 import { motion } from 'framer-motion';
 import '../outside-components/languageConfig';
+import TestimonialSection from './components/TestimonialSection';
 
 export default function Home() {
   const [lightMode, setLightMode] = useState(false);
@@ -42,9 +43,9 @@ export default function Home() {
   return (
     <div className={lightMode ? "light" : "dark"}>
       <main className={`flex min-h-screen flex-col ${lightMode ? "text-gray-900" : "bg-[#121212] text-white"}`}>
-        <Navbar lightMode={lightMode} setLightMode={setLightMode}/>
+        <Navbar lightMode={lightMode} setLightMode={setLightMode} />
         <div className="container mt-24 mx-auto px-12 py-4">
-          <Banner lightMode={lightMode}/>
+          <Banner lightMode={lightMode} />
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -52,8 +53,9 @@ export default function Home() {
             variants={sectionVariants}
             className="section"
           >
-            <AboutSection lightMode={lightMode}/>
+            <AboutSection lightMode={lightMode} />
           </motion.div>
+
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -61,8 +63,9 @@ export default function Home() {
             variants={sectionVariants}
             className="section"
           >
-          <SkillsSection lightMode={lightMode}/>
+            <SkillsSection lightMode={lightMode} />
           </motion.div>
+
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -70,8 +73,9 @@ export default function Home() {
             variants={sectionVariants}
             className="section"
           >
-          <ProjectsSection lightMode={lightMode}/>
+            <ProjectsSection lightMode={lightMode} />
           </motion.div>
+
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -79,8 +83,9 @@ export default function Home() {
             variants={sectionVariants}
             className="section"
           >
-          <HobbiesSection lightMode={lightMode}/>
+            <HobbiesSection lightMode={lightMode} />
           </motion.div>
+
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -88,8 +93,9 @@ export default function Home() {
             variants={sectionVariants}
             className="section"
           >
-          <WorkExperience lightMode={lightMode}/>
+            <WorkExperience lightMode={lightMode} />
           </motion.div>
+
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -97,11 +103,22 @@ export default function Home() {
             variants={sectionVariants}
             className="section"
           >
-          <EmailSection lightMode={lightMode}/>
+            <TestimonialSection lightMode={lightMode} />
+          </motion.div>
+          
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={sectionVariants}
+            className="section"
+            // id='contact'
+          >
+            <EmailSection lightMode={lightMode} />
           </motion.div>
         </div>
         <Footer />
       </main>
-      </div>
+    </div>
   );
 }

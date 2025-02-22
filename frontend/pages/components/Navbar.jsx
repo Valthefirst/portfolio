@@ -8,19 +8,18 @@ import MenuOverlay from "./MenuOverlay";
 import { BsFillCloudMoonFill } from 'react-icons/bs'
 import Image from 'next/image';
 
-
-
 const Navbar = ({ lightMode, setLightMode }) => {
   const { t, i18n } = useTranslation();
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const navLinks = [
-    { title: t("navbar.about"), path: "#about" },
-      { title: t("navbar.skills"), path: "#skills" },
-      { title: t("navbar.projects"), path: "#projects" },
-      { title: t("navbar.hobbies"), path: "#hobbies" },
-      { title: t("navbar.workExperience"), path: "#work" },
-      { title: t("navbar.contact"), path: "#contact" },
+    { title: "About", path: "#about" },
+    { title: "Skills", path: "#skills" },
+    { title: "Projects", path: "#projects" },
+    { title: "Hobbies", path: "#hobbies" },
+    { title: "Work Experience", path: "#work" },
+    { title: "Testimonials", path: "#testimonials" },
+    { title: "Contact", path: "#contact" },
   ];
   const toggleLangMenu = () => {
     setLangMenuOpen(!langMenuOpen);
@@ -32,25 +31,24 @@ const Navbar = ({ lightMode, setLightMode }) => {
   };
 
   return (
-    <nav className="fixed mx-auto border border-[#33353F] top-0 left-0 right-0 z-10 bg-blue-200 bg-opacity-100">
+    <nav className="fixed mx-auto border border-[#33353F] top-0 left-0 right-0 z-10 bg-blue-200 dark:bg-gray-900 bg-opacity-100">
       <div className="flex container lg:py-4 flex-wrap items-center justify-between mx-auto px-4 py-2">
         <Link
           href={"/"}
-          className="text-2xl md:text-5xl text-gray-900 font-semibold"
+          className="text-2xl md:text-5xl text-gray-900 dark:text-white font-semibold"
         >
-          {/* LOGO */}
         </Link>
         <div className="relative">
           {/* Language Selector */}
-          <button onClick={toggleLangMenu} className="text-gray-900 px-2 py-1 border border-gray-200 rounded-md">
+          <button onClick={toggleLangMenu} className="text-gray-900 dark:text-white px-2 py-1 border border-gray-200 dark:border-gray-700 rounded-md">
             {i18n.language.toUpperCase()}
           </button>
           {langMenuOpen && (
-            <div className="absolute top-10 right-0 bg-white text-gray-900 border border-gray-200 rounded-md shadow-md">
-              <button className="block px-4 py-2 hover:bg-gray-200" onClick={() => changeLanguage('en')}>
+            <div className="absolute top-10 right-0 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-md shadow-md">
+              <button className="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700" onClick={() => changeLanguage('en')}>
                 <Image src="/English.png" alt="English" width={20} height={20} className="inline h-4 mr-2" /> English
               </button>
-              <button className="block px-4 py-2 hover:bg-gray-200" onClick={() => changeLanguage('fr')}>
+              <button className="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700" onClick={() => changeLanguage('fr')}>
                 <Image src="/French.png" alt="Français" width={20} height={20} className="inline h-4 mr-2" /> Français
               </button>
             </div>
@@ -60,31 +58,31 @@ const Navbar = ({ lightMode, setLightMode }) => {
           {!navbarOpen ? (
             <button
               onClick={() => setNavbarOpen(true)}
-              className="flex items-center px-3 py-2 border rounded border-slate-400 text-slate-900 hover:text-gray-900 hover:border-gray-900"
+              className="flex items-center px-3 py-2 border rounded border-slate-400 text-slate-900 dark:text-white hover:text-gray-900 dark:hover:text-gray-300 hover:border-gray-900 dark:hover:border-gray-300"
             >
               <Bars3Icon className="h-5 w-5" />
             </button>
           ) : (
             <button
               onClick={() => setNavbarOpen(false)}
-              className="flex items-center px-3 py-2 border rounded border-slate-400 text-slate-900 hover:text-gray-900 hover:border-gray-900"
+              className="flex items-center px-3 py-2 border rounded border-slate-400 text-slate-900 dark:text-white hover:text-gray-900 dark:hover:text-gray-300 hover:border-gray-900 dark:hover:border-gray-300"
             >
               <XMarkIcon className="h-5 w-5" />
             </button>
           )}
         </div>
-        <div className={`menu ${navbarOpen ? 'block' : 'hidden'} md:block md:w-auto`} id="navbar">
+        <div className={`menu hidden md:block md:w-auto`} id="navbar">
           <ul className="nav-links flex p-5 md:p-0 md:flex-row md:space-x-8 mt-0">
             {navLinks.map((link, index) => (
               <li key={index} className="flex items-center">
                 {link.title !== "Contact" ? (
-                  <NavLink href={link.path} title={link.title} className="hover:text-blue-800" />
+                  <NavLink href={link.path} title={link.title} className="hover:text-blue-800 dark:hover:text-blue-400" />
                 ) : (
                   <div className="flex items-center">
-                    <NavLink href={link.path} title={link.title} className="hover:text-blue-800" />
+                    <NavLink href={link.path} title={link.title} className="hover:text-blue-800 dark:hover:text-blue-400" />
                     <BsFillCloudMoonFill
                       onClick={() => setLightMode(!lightMode)}
-                      className={`ml-3 cursor-pointer text-xl md:text-3xl ${lightMode ? "text-gray-900" : "text-gray-600"}`}
+                      className={`ml-3 cursor-pointer text-xl md:text-3xl ${lightMode ? "text-gray-900 dark:text-white" : "text-gray-600 dark:text-gray-400"}`}
                     />
                   </div>
                 )}
@@ -93,7 +91,7 @@ const Navbar = ({ lightMode, setLightMode }) => {
           </ul>
         </div>
       </div>
-      {navbarOpen ? <MenuOverlay links={navLinks} /> : null}
+      {navbarOpen ? <MenuOverlay links={navLinks} lightMode={lightMode} setLightMode={setLightMode} setNavbarOpen={setNavbarOpen} /> : null}
     </nav>
   );
 };

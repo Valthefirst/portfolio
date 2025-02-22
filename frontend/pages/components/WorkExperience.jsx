@@ -170,7 +170,7 @@ const WorkExperience = () => {
           {experiences.map((experience) => (
             <div key={experience.experienceId} className="timeline-item">
               <div className="timeline-marker"></div>
-              <div className="timeline-content bg-white dark:bg-[#222222] rounded-lg p-4 hover:scale-105 transition-transform duration-300 ease-in-out shadow-lg">
+              <div className="timeline-content bg-white dark:bg-gray-800 rounded-lg p-4 hover:scale-105 transition-transform duration-300 ease-in-out shadow-lg">
                 <div className="font-bold dark:text-white">{experience.date}</div>
                 <div className="font-semibold dark:text-gray-300">{experience.company}</div>
                 <div className="font-medium dark:text-gray-400">{experience.title}</div>
@@ -204,38 +204,38 @@ const WorkExperience = () => {
 
       {isModifyModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full space-y-4">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">Modify Experience</h3>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full space-y-4">
+            <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">Modify Experience</h3>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={modifiedExperience.title}
               onChange={(e) => setModifiedExperience({ ...modifiedExperience, title: e.target.value })}
               placeholder="Title"
             />
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={modifiedExperience.company}
               onChange={(e) => setModifiedExperience({ ...modifiedExperience, company: e.target.value })}
               placeholder="Company"
             />
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={modifiedExperience.location}
               onChange={(e) => setModifiedExperience({ ...modifiedExperience, location: e.target.value })}
               placeholder="Location"
             />
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={modifiedExperience.date}
               onChange={(e) => setModifiedExperience({ ...modifiedExperience, date: e.target.value })}
               placeholder="Date"
             />
             <textarea
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={modifiedExperience.descriptions.join("\n")}
               onChange={(e) => setModifiedExperience({ ...modifiedExperience, descriptions: e.target.value.split("\n") })}
               placeholder="Descriptions (one per line)"
@@ -254,38 +254,38 @@ const WorkExperience = () => {
 
       {isAddModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full space-y-4">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">Add Experience</h3>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full space-y-4">
+            <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">Add Experience</h3>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={newExperience.title}
               onChange={(e) => setNewExperience({ ...newExperience, title: e.target.value })}
               placeholder="Title"
             />
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={newExperience.company}
               onChange={(e) => setNewExperience({ ...newExperience, company: e.target.value })}
               placeholder="Company"
             />
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={newExperience.location}
               onChange={(e) => setNewExperience({ ...newExperience, location: e.target.value })}
               placeholder="Location"
             />
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={newExperience.date}
               onChange={(e) => setNewExperience({ ...newExperience, date: e.target.value })}
               placeholder="Date"
             />
             <textarea
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={newExperience.descriptions.join("\n")}
               onChange={(e) => setNewExperience({ ...newExperience, descriptions: e.target.value.split("\n") })}
               placeholder="Descriptions (one per line)"

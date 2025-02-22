@@ -15,14 +15,13 @@ const HobbiesSection = () => {
   const [newHobby, setNewHobby] = useState({ hobby: "", description: "", image: "" });
   const [originalHobbyName, setOriginalHobbyName] = useState("");
 
-  // Wait for translations to be ready
   useEffect(() => {
     if (ready) {
       setContentReady(true);
     }
   }, [ready]);
 
-  // Fetch the initial profile JSON (including hobbies)
+  // Fetch the initial profile JSON
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -40,7 +39,6 @@ const HobbiesSection = () => {
     fetchProfileData();
   }, []);
 
-  // Check user login status
   useEffect(() => {
     const checkLoginStatus = async () => {
       const token = sessionStorage.getItem('token');
@@ -68,7 +66,6 @@ const HobbiesSection = () => {
     checkLoginStatus();
   }, []);
 
-  // Delete a hobby
   const handleDelete = async (hobby) => {
     try {
       const token = sessionStorage.getItem('token');
@@ -76,27 +73,27 @@ const HobbiesSection = () => {
         console.error('No token found');
         return;
       }
-  
+
       // First GET the current profile data
       const getResponse = await fetch('https://portfolio-u292.onrender.com/me', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
-      
+
       if (!getResponse.ok) throw new Error('Failed to fetch current profile');
       const currentProfile = await getResponse.json();
-  
+
       // Create a copy of the current hobbies and delete the selected one
       const updatedHobbies = { ...currentProfile.hobbies };
       delete updatedHobbies[hobby];
-  
+
       // Create updated profile with new hobbies
       const updatedProfile = {
         ...currentProfile,
         hobbies: updatedHobbies
       };
-  
+
       // Send PUT request with full updated profile
       const putResponse = await fetch('https://portfolio-u292.onrender.com/me', {
         method: 'PUT',
@@ -106,10 +103,10 @@ const HobbiesSection = () => {
         },
         body: JSON.stringify(updatedProfile),
       });
-  
+
       if (putResponse.ok) {
         console.log('Hobby deleted successfully');
-        setHobbies(updatedHobbies); // Update local state
+        setHobbies(updatedHobbies);
       } else {
         console.error('Error deleting hobby');
       }
@@ -130,34 +127,33 @@ const HobbiesSection = () => {
     try {
       const token = sessionStorage.getItem('token');
       if (!token) return;
-  
+
       // Get current profile
       const getResponse = await fetch('https://portfolio-u292.onrender.com/me', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const currentProfile = await getResponse.json();
-  
+
       // Create copy of hobbies
       const updatedHobbies = { ...currentProfile.hobbies };
-  
+
       // If name changed, delete old entry
       if (originalHobbyName !== modifiedHobby.hobby) {
         delete updatedHobbies[originalHobbyName];
       }
-  
+
       // Add/update the (potentially renamed) hobby
       updatedHobbies[modifiedHobby.hobby] = {
         description: modifiedHobby.description,
         image: modifiedHobby.image
       };
-  
+
       // Update full profile
       const updatedProfile = {
         ...currentProfile,
         hobbies: updatedHobbies
       };
-  
-      // Send PUT request
+
       const putResponse = await fetch('https://portfolio-u292.onrender.com/me', {
         method: 'PUT',
         headers: {
@@ -166,7 +162,7 @@ const HobbiesSection = () => {
         },
         body: JSON.stringify(updatedProfile),
       });
-  
+
       if (putResponse.ok) {
         setHobbies(updatedHobbies);
         setIsModifyModalOpen(false);
@@ -190,31 +186,31 @@ const HobbiesSection = () => {
         console.error('No token found');
         return;
       }
-  
+
       // First GET the current profile data
       const getResponse = await fetch('https://portfolio-u292.onrender.com/me', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
-  
+
       if (!getResponse.ok) throw new Error('Failed to fetch current profile');
       const currentProfile = await getResponse.json();
-  
+
       // Create a copy of the current hobbies and add the new hobby
       const updatedHobbies = { ...currentProfile.hobbies };
       updatedHobbies[newHobby.hobby] = {
         description: newHobby.description,
         image: newHobby.image,
       };
-  
+
       // Create updated profile with new hobbies
       const updatedProfile = {
         ...currentProfile,
         hobbies: updatedHobbies,
       };
-  
-      // Send PUT request with full updated profile
+
+      // Send PUT request with updated profile
       const putResponse = await fetch('https://portfolio-u292.onrender.com/me', {
         method: 'PUT',
         headers: {
@@ -223,11 +219,11 @@ const HobbiesSection = () => {
         },
         body: JSON.stringify(updatedProfile),
       });
-  
+
       if (putResponse.ok) {
         console.log('Hobby added successfully');
-        setIsAddModalOpen(false); // Close the modal
-        setHobbies(updatedHobbies); // Update local state
+        setIsAddModalOpen(false);
+        setHobbies(updatedHobbies);
         setNewHobby({ hobby: "", description: "", image: "" }); // Reset the form
       } else {
         console.error('Error adding hobby');
@@ -250,7 +246,7 @@ const HobbiesSection = () => {
         {Object.entries(hobbies).map(([hobby, hobbyInfo]) => {
           const { description, image } = hobbyInfo;
           return (
-            <div key={hobby} className="bg-white shadow-lg rounded-lg overflow-hidden">
+            <div key={hobby} className="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
               <div className="relative w-full h-48 sm:h-64">
                 <Image
                   src={image}
@@ -260,18 +256,18 @@ const HobbiesSection = () => {
                 />
               </div>
               <div className="p-4">
-                <h3 className="text-xl font-semibold">{hobby}</h3>
-                <p className="text-sm">{description}</p>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">{hobby}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{description}</p>
                 {isLoggedIn && (
                   <div className="mt-4">
-                    <button 
-                      onClick={() => handleModify(hobby)} 
+                    <button
+                      onClick={() => handleModify(hobby)}
                       className="mr-2 bg-blue-500 text-white px-4 py-2 rounded"
                     >
                       Modify
                     </button>
-                    <button 
-                      onClick={() => handleDelete(hobby)} 
+                    <button
+                      onClick={() => handleDelete(hobby)}
                       className="bg-red-500 text-white px-4 py-2 rounded"
                     >
                       Delete
@@ -285,8 +281,8 @@ const HobbiesSection = () => {
       </div>
       {isLoggedIn && (
         <div className="mt-4 text-center">
-          <button 
-            onClick={handleAddHobby} 
+          <button
+            onClick={handleAddHobby}
             className="bg-green-500 text-white px-4 py-2 rounded"
           >
             Add Hobby
@@ -297,37 +293,37 @@ const HobbiesSection = () => {
       {/* Modify Hobby Modal */}
       {isModifyModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full space-y-4">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">Modify Hobby</h3>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full space-y-4">
+            <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">Modify Hobby</h3>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={modifiedHobby.hobby}
               onChange={(e) => setModifiedHobby({ ...modifiedHobby, hobby: e.target.value })}
               placeholder="Hobby Name"
             />
             <textarea
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={modifiedHobby.description}
               onChange={(e) => setModifiedHobby({ ...modifiedHobby, description: e.target.value })}
               placeholder="Hobby Description"
             />
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={modifiedHobby.image}
               onChange={(e) => setModifiedHobby({ ...modifiedHobby, image: e.target.value })}
               placeholder="Hobby Image URL"
             />
             <div className="mt-4">
-              <button 
-                onClick={handleSaveModify} 
+              <button
+                onClick={handleSaveModify}
                 className="mr-2 bg-blue-500 text-white px-4 py-2 rounded"
               >
                 Save
               </button>
-              <button 
-                onClick={() => setIsModifyModalOpen(false)} 
+              <button
+                onClick={() => setIsModifyModalOpen(false)}
                 className="bg-gray-500 text-white px-4 py-2 rounded"
               >
                 Cancel
@@ -340,37 +336,37 @@ const HobbiesSection = () => {
       {/* Add Hobby Modal */}
       {isAddModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full space-y-4">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">Add Hobby</h3>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full space-y-4">
+            <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">Add Hobby</h3>
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={newHobby.hobby}
               onChange={(e) => setNewHobby({ ...newHobby, hobby: e.target.value })}
               placeholder="Hobby Name"
             />
             <textarea
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={newHobby.description}
               onChange={(e) => setNewHobby({ ...newHobby, description: e.target.value })}
               placeholder="Hobby Description"
             />
             <input
               type="text"
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white"
               value={newHobby.image}
               onChange={(e) => setNewHobby({ ...newHobby, image: e.target.value })}
               placeholder="Hobby Image URL"
             />
             <div className="mt-4">
-              <button 
-                onClick={handleSaveNewHobby} 
+              <button
+                onClick={handleSaveNewHobby}
                 className="mr-2 bg-green-500 text-white px-4 py-2 rounded"
               >
                 Save
               </button>
-              <button 
-                onClick={() => setIsAddModalOpen(false)} 
+              <button
+                onClick={() => setIsAddModalOpen(false)}
                 className="bg-gray-500 text-white px-4 py-2 rounded"
               >
                 Cancel

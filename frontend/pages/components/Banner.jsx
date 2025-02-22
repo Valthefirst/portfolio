@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { TypeAnimation } from "react-type-animation";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -18,8 +17,9 @@ const Banner = () => {
   }, [ready]);
 
   if (!contentReady) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
+  
   const resumeLink = i18n.language === 'fr' ? 'https://pdflink.to/ad166957/' : 'https://pdflink.to/4ef63d0b/';
   return (
     <section className="fullscreen-banner">
@@ -42,14 +42,11 @@ const Banner = () => {
               repeat={Infinity}
               className="text-lg text-pink-950"
             />
-            <p className="quote-style">
-            {t('banner.quote')}
-            </p>
           </motion.div>
         </div>
 
         <div className="text-center absolute bottom-10 w-full">
-        <Link href={resumeLink} className="inline-flex items-center justify-center bg-gradient-to-r from-blue-600 to-blue-900 hover:from-blue-700 hover:to-blue-300 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 ease-in-out shadow-lg">
+          <Link href={resumeLink} className="inline-flex items-center justify-center bg-gradient-to-r from-blue-600 to-blue-900 hover:from-blue-700 hover:to-blue-300 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 ease-in-out shadow-lg">
             <span className="ml-3">{t('banner.downloadResume')}</span>
           </Link>
         </div>

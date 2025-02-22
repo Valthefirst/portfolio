@@ -13,5 +13,3 @@ const ProjectCard = ({ imgUrl }) => {
 };
 
 export default ProjectCard;
-
-
