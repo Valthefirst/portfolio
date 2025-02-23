@@ -1,3 +1,4 @@
+import datetime
 import uuid
 
 from fastapi import APIRouter, HTTPException
@@ -37,14 +38,6 @@ async def create_access_token(user_data: models.LoginSchema):
         )
 
 
-@router.post('/ping')
-async def validate_token(request: Request):
-    headers = request.headers
-    jwt = headers.get("authorization")
-    user = auth.verify_id_token(jwt)
-    return user
-
-
 @router.get("/hi")
 async def hello(request: Request):
     user = await verify_token(request)
@@ -60,17 +53,17 @@ async def list_projects():
     return models.ProjectCollection(projects=await main.projects_collection.find().to_list())
 
 
-@router.get("/projects/{project_id}",
-            response_description="Get a single project",
-            response_model=models.ProjectModel,
-            response_model_by_alias=False)
-async def get_project(project_id: str):
-    if (
-            project := await main.projects_collection.find_one({"projectId": project_id})
-    ) is not None:
-        return project
-
-    raise HTTPException(status_code=404, detail=f"Project {project_id} not found")
+# @router.get("/projects/{project_id}",
+#             response_description="Get a single project",
+#             response_model=models.ProjectModel,
+#             response_model_by_alias=False)
+# async def get_project(project_id: str):
+#     if (
+#             project := await main.projects_collection.find_one({"projectId": project_id})
+#     ) is not None:
+#         return project
+#
+#     raise HTTPException(status_code=404, detail=f"Project {project_id} not found")
 
 
 @router.post("/projects",
@@ -186,69 +179,71 @@ async def delete_experience(request: Request, experience_id: str):
 
 
 @router.get(
-    "/comments",
-    response_description="List all comments",
-    response_model=models.CommentCollection,
+    "/testimonials",
+    response_description="List all testimonials",
+    response_model=models.TestimonialCollection,
     response_model_by_alias=False)
-async def list_comments():
-    return models.CommentCollection(comments=await main.comments_collection.find().to_list())
+async def list_testimonials():
+    return models.TestimonialCollection(testimonials=await main.testimonials_collection.find().to_list())
 
 
-# @router.get("/comments/{comment_id}",
-#             response_description="Get a single comment",
-#             response_model=models.CommentModel,
+# @router.get("/testimonials/{testimonial_id}",
+#             response_description="Get a single testimonial",
+#             response_model=models.TestimonialModel,
 #             response_model_by_alias=False)
-# async def get_comment(comment_id: str):
+# async def get_testimonial(testimonial_id: str):
 #     if (
-#             comment := await main.comments_collection.find_one({"commentId": comment_id})
+#             testimonial := await main.testimonials_collection.find_one({"testimonialId": testimonial_id})
 #     ) is not None:
-#         return comment
+#         return testimonial
 #
-#     raise HTTPException(status_code=404, detail=f"Comment {comment_id} not found")
+#     raise HTTPException(status_code=404, detail=f"Testimonial {testimonial_id} not found")
 
 
-@router.post("/comments",
-             response_description="Add new comment",
-             response_model=models.CommentModel,
+@router.post("/testimonials",
+             response_description="Add new testimonial",
+             response_model=models.TestimonialModel,
              status_code=201,
              response_model_by_alias=False)
-async def create_comment(comment: models.CommentModel):
-    comment.commentId = str(uuid.uuid4())
-    await main.comments_collection.insert_one(comment.model_dump())
-    return comment
+async def create_testimonial(testimonial: models.TestimonialModel):
+    testimonial.testimonialId = str(uuid.uuid4())
+    testimonial.date = str(datetime.date.today())
+    testimonial.isVerified = False
+    await main.testimonials_collection.insert_one(testimonial.model_dump())
+    return testimonial
 
 
-@router.put("/comments/{comment_id}",
-            response_description="Update a comment",
-            response_model=models.CommentModel,
+@router.put("/testimonials/{testimonial_id}",
+            response_description="Update a testimonial",
+            response_model=models.TestimonialModel,
             response_model_by_alias=False)
-async def update_comment(request: Request, comment_id: str, comment: models.UpdateCommentModel):
+async def update_testimonial(request: Request, testimonial_id: str, testimonial: models.UpdateTestimonialModel):
     await verify_token(request)
     if (
-            existing_comment := await main.comments_collection.find_one({"commentId": comment_id})
+            existing_testimonial := await main.testimonials_collection.find_one({"testimonialId": testimonial_id})
     ) is not None:
         # If the update is empty, we should still return the matching document:
-        if comment.dict(exclude_unset=True) == {}:
-            return existing_comment
+        if testimonial.dict(exclude_unset=True) == {}:
+            return existing_testimonial
 
-        updated_comment = {**existing_comment, **comment.dict()}
-        await main.comments_collection.update_one({"commentId": comment_id}, {"$set": updated_comment})
-        return updated_comment
+        updated_testimonial = {**existing_testimonial, **testimonial.dict()}
+        await main.testimonials_collection.update_one({"testimonialId": testimonial_id}, {"$set": updated_testimonial})
+        return updated_testimonial
 
-    raise HTTPException(status_code=404, detail=f"Comment {comment_id} not found")
+    raise HTTPException(status_code=404, detail=f"Testimonial {testimonial_id} not found")
 
 
-@router.delete("/comments/{comment_id}",
-               response_description="Delete comment",
+@router.delete("/testimonials/{testimonial_id}",
+               response_description="Delete testimonial",
                status_code=204)
-async def delete_comment(request: Request, comment_id: str):
+async def delete_testimonial(request: Request, testimonial_id: str):
     await verify_token(request)
-    delete_result = await main.comments_collection.delete_one({"commentId": comment_id})
+    delete_result = await main.testimonials_collection.delete_one({"testimonialId": testimonial_id})
 
     if delete_result.deleted_count == 1:
         return Response(status_code=204)
 
-    raise HTTPException(status_code=404, detail=f"Comment {comment_id} not found")
+    raise HTTPException(status_code=404, detail=f"Testimonial {testimonial_id} not found")
 
 
 @router.get(
@@ -270,23 +265,330 @@ async def update_me(request: Request, me: models.MeModel):
     return updated_me
 
 
-# @router.get("/skills",
-#             response_description="Get skills",
-#             response_model=models.SkillsCategoryModel,
-#             response_model_by_alias=False)
-# async def get_skills():
-#     return await main.skills_collection.find_one()
-#
-#
-# @router.put("/skills",
-#             response_description="Update skills",
-#             response_model=models.SkillsCategoryModel,
-#             response_model_by_alias=False)
-# async def update_skills(request: Request, skills: models.SkillsCategoryModel):
-#     await verify_token(request)
-#     updated_skills = await main.skills_collection.find_one_and_update({}, {"$set": skills.dict()})
-#     return updated_skills
+@router.get("/skills/software-dev-tools",
+            response_description="List all skills",
+            response_model=models.SkillCollection,
+            response_model_by_alias=False)
+async def list_skills_software_dev_tools():
+    return models.SkillCollection(skills=await main.skills_software_dev_tools_collection.find().to_list())
 
+
+@router.post("/skills/software-dev-tools",
+             response_description="Add new skill",
+             response_model=models.SkillModel,
+             status_code=201,
+             response_model_by_alias=False)
+async def create_skill_software_dev_tools(request: Request, skill: models.SkillModel):
+    await verify_token(request)
+    skill.skillId = str(uuid.uuid4())
+    await main.skills_software_dev_tools_collection.insert_one(skill.model_dump())
+    return skill
+
+
+@router.put("/skills/software-dev-tools/{skill_id}",
+            response_description="Update skills",
+            response_model=models.SkillModel,
+            response_model_by_alias=False)
+async def update_skill_software_dev_tools(request: Request, skill_id: str, skills: models.UpdateSkillsModel):
+    await verify_token(request)
+    if (
+            existing_skills := await main.skills_software_dev_tools_collection.find_one({"skillId": skill_id})
+    ) is not None:
+        # If the update is empty, we should still return the matching document:
+        if skills.dict(exclude_unset=True) == {}:
+            return existing_skills
+
+        updated_skills = {**existing_skills, **skills.dict()}
+        await main.skills_software_dev_tools_collection.update_one({"skillId": skill_id}, {"$set": updated_skills})
+        return updated_skills
+
+    raise HTTPException(status_code=404, detail=f"Skill {skill_id} not found")
+
+
+@router.delete("/skills/software-dev-tools/{skill_id}",
+               response_description="Delete skills",
+               status_code=204)
+async def delete_skills_software_dev_tools(request: Request, skill_id: str):
+    await verify_token(request)
+    delete_result = await main.skills_software_dev_tools_collection.delete_one({"skillId": skill_id})
+
+    if delete_result.deleted_count == 1:
+        return Response(status_code=204)
+
+    raise HTTPException(status_code=404, detail=f"Skill {skill_id} not found")
+
+
+@router.get("/skills/database",
+            response_description="List all skills",
+            response_model=models.SkillCollection,
+            response_model_by_alias=False)
+async def list_skills_database():
+    return models.SkillCollection(skills=await main.skills_database_collection.find().to_list())
+
+
+@router.post("/skills/database",
+             response_description="Add new skill",
+             response_model=models.SkillModel,
+             status_code=201,
+             response_model_by_alias=False)
+async def create_skill_database(request: Request, skill: models.SkillModel):
+    await verify_token(request)
+    skill.skillId = str(uuid.uuid4())
+    await main.skills_database_collection.insert_one(skill.model_dump())
+    return skill
+
+
+@router.put("/skills/database/{skill_id}",
+            response_description="Update skills",
+            response_model=models.SkillModel,
+            response_model_by_alias=False)
+async def update_skill_database(request: Request, skill_id: str, skills: models.UpdateSkillsModel):
+    await verify_token(request)
+    if (
+            existing_skills := await main.skills_database_collection.find_one({"skillId": skill_id})
+    ) is not None:
+        # If the update is empty, we should still return the matching document:
+        if skills.dict(exclude_unset=True) == {}:
+            return existing_skills
+
+        updated_skills = {**existing_skills, **skills.dict()}
+        await main.skills_database_collection.update_one({"skillId": skill_id}, {"$set": updated_skills})
+        return updated_skills
+
+    raise HTTPException(status_code=404, detail=f"Skill {skill_id} not found")
+
+
+@router.delete("/skills/database/{skill_id}",
+               response_description="Delete skills",
+               status_code=204)
+async def delete_skills_database(request: Request, skill_id: str):
+    await verify_token(request)
+    delete_result = await main.skills_database_collection.delete_one({"skillId": skill_id})
+
+    if delete_result.deleted_count == 1:
+        return Response(status_code=204)
+
+    raise HTTPException(status_code=404, detail=f"Skill {skill_id} not found")
+
+@router.get("/skills/database",
+            response_description="List all skills",
+            response_model=models.SkillCollection,
+            response_model_by_alias=False)
+async def list_skills_database():
+    return models.SkillCollection(skills=await main.skills_database_collection.find().to_list())
+
+
+@router.get("/skills/languages",
+            response_description="List all skills",
+            response_model=models.SkillCollection,
+            response_model_by_alias=False)
+async def list_skills_languages():
+    return models.SkillCollection(skills=await main.skills_programming_languages_collection.find().to_list())
+
+
+@router.post("/skills/languages",
+             response_description="Add new skill",
+             response_model=models.SkillModel,
+             status_code=201,
+             response_model_by_alias=False)
+async def create_skill_languages(request: Request, skill: models.SkillModel):
+    await verify_token(request)
+    skill.skillId = str(uuid.uuid4())
+    await main.skills_languages_collection.insert_one(skill.model_dump())
+    return skill
+
+
+@router.put("/skills/languages/{skill_id}",
+            response_description="Update skills",
+            response_model=models.SkillModel,
+            response_model_by_alias=False)
+async def update_skill_languages(request: Request, skill_id: str, skills: models.UpdateSkillsModel):
+    await verify_token(request)
+    if (
+            existing_skills := await main.skills_languages_collection.find_one({"skillId": skill_id})
+    ) is not None:
+        # If the update is empty, we should still return the matching document:
+        if skills.dict(exclude_unset=True) == {}:
+            return existing_skills
+
+        updated_skills = {**existing_skills, **skills.dict()}
+        await main.skills_languages_collection.update_one({"skillId": skill_id}, {"$set": updated_skills})
+        return updated_skills
+
+    raise HTTPException(status_code=404, detail=f"Skill {skill_id} not found")
+
+
+@router.delete("/skills/languages/{skill_id}",
+               response_description="Delete skills",
+               status_code=204)
+async def delete_skills_languages(request: Request, skill_id: str):
+    await verify_token(request)
+    delete_result = await main.skills_languages_collection.delete_one({"skillId": skill_id})
+
+    if delete_result.deleted_count == 1:
+        return Response(status_code=204)
+
+    raise HTTPException(status_code=404, detail=f"Skill {skill_id} not found")
+
+
+@router.get("/skills/frameworks",
+            response_description="List all skills",
+            response_model=models.SkillCollection,
+            response_model_by_alias=False)
+async def list_skills_frameworks():
+    return models.SkillCollection(skills=await main.skills_frameworks_collection.find().to_list())
+
+
+@router.post("/skills/frameworks",
+             response_description="Add new skill",
+             response_model=models.SkillModel,
+             status_code=201,
+             response_model_by_alias=False)
+async def create_skill_frameworks(request: Request, skill: models.SkillModel):
+    await verify_token(request)
+    skill.skillId = str(uuid.uuid4())
+    await main.skills_frameworks_collection.insert_one(skill.model_dump())
+    return skill
+
+
+@router.put("/skills/frameworks/{skill_id}",
+            response_description="Update skills",
+            response_model=models.SkillModel,
+            response_model_by_alias=False)
+async def update_skill_frameworks(request: Request, skill_id: str, skills: models.UpdateSkillsModel):
+    await verify_token(request)
+    if (
+            existing_skills := await main.skills_frameworks_collection.find_one({"skillId": skill_id})
+    ) is not None:
+        # If the update is empty, we should still return the matching document:
+        if skills.dict(exclude_unset=True) == {}:
+            return existing_skills
+
+        updated_skills = {**existing_skills, **skills.dict()}
+        await main.skills_frameworks_collection.update_one({"skillId": skill_id}, {"$set": updated_skills})
+        return updated_skills
+
+    raise HTTPException(status_code=404, detail=f"Skill {skill_id} not found")
+
+
+@router.delete("/skills/frameworks/{skill_id}",
+               response_description="Delete skills",
+               status_code=204)
+async def delete_skills_frameworks(request: Request, skill_id: str):
+    await verify_token(request)
+    delete_result = await main.skills_frameworks_collection.delete_one({"skillId": skill_id})
+
+    if delete_result.deleted_count == 1:
+        return Response(status_code=204)
+
+    raise HTTPException(status_code=404, detail=f"Skill {skill_id} not found")
+
+
+@router.get("/skills/operating-systems",
+            response_description="List all skills",
+            response_model=models.SkillCollection,
+            response_model_by_alias=False)
+async def list_skills_operating_systems():
+    return models.SkillCollection(skills=await main.skills_operating_systems_collection.find().to_list())
+
+
+@router.post("/skills/operating-systems",
+             response_description="Add new skill",
+             response_model=models.SkillModel,
+             status_code=201,
+             response_model_by_alias=False)
+async def create_skill_operating_systems(request: Request, skill: models.SkillModel):
+    await verify_token(request)
+    skill.skillId = str(uuid.uuid4())
+    await main.skills_operating_systems_collection.insert_one(skill.model_dump())
+    return skill
+
+
+@router.put("/skills/operating-systems/{skill_id}",
+            response_description="Update skills",
+            response_model=models.SkillModel,
+            response_model_by_alias=False)
+async def update_skill_operating_systems(request: Request, skill_id: str, skills: models.UpdateSkillsModel):
+    await verify_token(request)
+    if (
+            existing_skills := await main.skills_operating_systems_collection.find_one({"skillId": skill_id})
+    ) is not None:
+        # If the update is empty, we should still return the matching document:
+        if skills.dict(exclude_unset=True) == {}:
+            return existing_skills
+
+        updated_skills = {**existing_skills, **skills.dict()}
+        await main.skills_operating_systems_collection.update_one({"skillId": skill_id}, {"$set": updated_skills})
+        return updated_skills
+
+    raise HTTPException(status_code=404, detail=f"Skill {skill_id} not found")
+
+
+@router.delete("/skills/operating-systems/{skill_id}",
+               response_description="Delete skills",
+               status_code=204)
+async def delete_skills_operating_systems(request: Request, skill_id: str):
+    await verify_token(request)
+    delete_result = await main.skills_operating_systems_collection.delete_one({"skillId": skill_id})
+
+    if delete_result.deleted_count == 1:
+        return Response(status_code=204)
+
+    raise HTTPException(status_code=404, detail=f"Skill {skill_id} not found")
+
+
+@router.get("/skills/cloud-productivity-tools",
+            response_description="List all skills",
+            response_model=models.SkillCollection,
+            response_model_by_alias=False)
+async def list_skills_cloud_productivity_tools():
+    return models.SkillCollection(skills=await main.skills_cloud_productivity_tools_collection.find().to_list())
+
+
+@router.post("/skills/cloud-productivity-tools",
+             response_description="Add new skill",
+             response_model=models.SkillModel,
+             status_code=201,
+             response_model_by_alias=False)
+async def create_skill_cloud_productivity_tools(request: Request, skill: models.SkillModel):
+    await verify_token(request)
+    skill.skillId = str(uuid.uuid4())
+    await main.skills_cloud_productivity_tools_collection.insert_one(skill.model_dump())
+    return skill
+
+
+@router.put("/skills/cloud-productivity-tools/{skill_id}",
+            response_description="Update skills",
+            response_model=models.SkillModel,
+            response_model_by_alias=False)
+async def update_skill_cloud_productivity_tools(request: Request, skill_id: str, skills: models.UpdateSkillsModel):
+    await verify_token(request)
+    if (
+            existing_skills := await main.skills_cloud_productivity_tools_collection.find_one({"skillId": skill_id})
+    ) is not None:
+        # If the update is empty, we should still return the matching document:
+        if skills.dict(exclude_unset=True) == {}:
+            return existing_skills
+
+        updated_skills = {**existing_skills, **skills.dict()}
+        await main.skills_cloud_productivity_tools_collection.update_one({"skillId": skill_id},
+                                                                         {"$set": updated_skills})
+        return updated_skills
+
+    raise HTTPException(status_code=404, detail=f"Skill {skill_id} not found")
+
+
+@router.delete("/skills/cloud-productivity-tools/{skill_id}",
+               response_description="Delete skills",
+               status_code=204)
+async def delete_skills_cloud_productivity_tools(request: Request, skill_id: str):
+    await verify_token(request)
+    delete_result = await main.skills_cloud_productivity_tools_collection.delete_one({"skillId": skill_id})
+
+    if delete_result.deleted_count == 1:
+        return Response(status_code=204)
+
+    raise HTTPException(status_code=404, detail=f"Skill {skill_id} not found")
 
 
 async def verify_token(request: Request):

@@ -1,0 +1,53 @@
+{
+  "about": {
+    "title": "À propos de moi"
+  },
+  "skills": {
+    "title": "Mes Compétences",
+    "softwareDevelopmentTools": "Outils de Développement Logiciel",
+    "databases": "Bases de Données",
+    "programmingLanguages": "Langages de Programmation",
+    "frameworks": "Frameworks",
+    "operatingSystems": "Systèmes d'Exploitation",
+    "productivity": "Outil de productivité basé sur le cloud"
+  },
+  "hobbies": {
+    "title": "Mes Loisirs"
+  },
+  "emailSection": {
+    "title": "Prenons Contact",
+    "description": "Je suis ouvert aux connexions ! Envoyez-moi un message, et je vous répondrai dès que possible.",
+    "emailSent": "E-mail envoyé avec succès !",
+    "yourEmail": "Votre Email",
+    "subject": "Sujet",
+    "message": "Message",
+    "sendMessage": "Envoyer le Message",
+    "placeholderEmail": "johndoe@example.com",
+    "placeholderSubject": "Object",
+    "placeholderMessage": "Parlons de...",
+    "findMeHere": "Trouvez-moi ici !"
+  },
+  "banner": {
+    "name": "Valentine Nneji",
+    "technicalSupport": "Support Technique.",
+    "softwareDevelopment": "Développement Logiciel",
+    "downloadResume": "Télécharger CV"
+  },
+  "navbar": {
+    "about": "À Propos",
+    "skills": "Compétences",
+    "projects": "Projets",
+    "hobbies": "Loisirs",
+    "workExperience": "Expérience Professionnelle",
+    "testimonials": "Témoignages",
+    "contact": "Contact",
+    "english": "Anglais",
+    "french": "Français"
+  },
+  "common": {
+    "title": "Mes Projets"
+  },
+  "footer": {
+    "copyrightText": "Tous droits réservés."
+  }
+}

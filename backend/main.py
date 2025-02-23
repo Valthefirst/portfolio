@@ -19,8 +19,6 @@ app = FastAPI(
 )
 
 origins = [
-    "http://localhost",
-    "http://localhost:8080",
     "http://localhost:3000",
     "https://portfolio-blond-eight-32.vercel.app",
 ]
@@ -56,11 +54,16 @@ app.include_router(router)
 client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGODB_URL"))
 db = client.get_database("x")
 projects_collection = db["projects"]
-comments_collection = db.get_collection("comments")
+testimonials_collection = db.get_collection("testimonials")
 experiences_collection = db.get_collection("experiences")
 me_collection = db.get_collection("me")
-skills_collection = db.get_collection("skills")
-
+# skills_collection = db.get_collection("skills")
+skills_software_dev_tools_collection = db.get_collection("skills_software_dev_tools")
+skills_database_collection = db.get_collection("skills_database")
+skills_programming_languages_collection = db.get_collection("skills_programming_languages")
+skills_frameworks_collection = db.get_collection("skills_frameworks")
+skills_operating_systems_collection = db.get_collection("skills_operating_systems")
+skills_cloud_productivity_tools_collection = db.get_collection("skills_cloud_productivity_tools")
 
 # @app.on_event("startup")
 # async def startup_event():

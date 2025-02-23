@@ -1,0 +1,53 @@
+  {
+    "about": {
+      "title": "About Me"
+    },
+    "skills": {
+      "title": "My Skills",
+      "softwareDevelopmentTools": "Software Development Tools",
+      "databases": "Databases",
+      "programmingLanguages": "Programming Languages",
+      "frameworks": "Frameworks",
+      "operatingSystems": "Operating Systems",
+      "productivity": "Cloud-based productivity tools"
+    },
+    "hobbies": {
+      "title": "My Hobbies"
+    },
+    "emailSection": {
+      "title": "Let's Connect",
+      "description": "I'm open to connections! Send me a message, and I'll get back to you as soon as I can.",
+      "emailSent": "Email sent successfully!",
+      "yourEmail": "Your Email",
+      "subject": "Subject",
+      "message": "Message",
+      "sendMessage": "Send Message",
+      "placeholderEmail": "johndoe@example.com",
+      "placeholderSubject": "Subject",
+      "placeholderMessage": "Let's talk about...",
+      "findMeHere": "Find me here!"
+    },
+    "banner": {
+      "name": "Valentine Nneji",
+      "technicalSupport": "Technical Support.",
+      "softwareDevelopment": "Software Development",
+      "downloadResume": "Download Resume"
+    },
+    "navbar": {
+      "about": "About",
+      "skills": "Skills",
+      "projects": "Projects",
+      "hobbies": "Hobbies",
+      "workExperience": "Work Experience",
+      "testimonials": "Testimonials",
+      "contact": "Contact",
+      "english": "English",
+      "french": "French"
+    },
+    "common": {
+      "title": "My Projects"
+    },
+    "footer": {
+      "copyrightText": "All rights reserved."
+    }
+  }

@@ -21,9 +21,6 @@ class ProjectModel(BaseModel):
     description: str = Field(...)
     date: str = Field(...)
     link: str = Field(...)
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True,
-    )
 
 
 class UpdateProjectModel(BaseModel):
@@ -31,9 +28,6 @@ class UpdateProjectModel(BaseModel):
     description: Optional[str] = None
     date: Optional[str] = None
     link: Optional[str] = None
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True,
-    )
 
 
 class ExperienceModel(BaseModel):
@@ -43,9 +37,6 @@ class ExperienceModel(BaseModel):
     location: str = Field(...)
     date: str = Field(...)
     descriptions: List[str] = Field(...)
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True,
-    )
 
 
 class UpdateExperienceModel(BaseModel):
@@ -54,30 +45,21 @@ class UpdateExperienceModel(BaseModel):
     location: Optional[str] = None
     date: Optional[str] = None
     descriptions: Optional[List[str]] = None
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True,
-    )
 
 
-class CommentModel(BaseModel):
-    commentId: Optional[str] = None
+class TestimonialModel(BaseModel):
+    testimonialId: Optional[str] = None
     content: str = Field(...)
-    timestamp: str = Field(...)
+    date: Optional[str] = None
     name: str = Field(...)
-    isVerified: bool = Field(...)
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True,
-    )
+    isVerified: Optional[bool] = None
 
 
-class UpdateCommentModel(BaseModel):
+class UpdateTestimonialModel(BaseModel):
     content: Optional[str] = None
-    timestamp: Optional[str] = None
+    date: Optional[str] = None
     name: Optional[str] = None
     isVerified: Optional[bool] = None
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True,
-    )
 
 
 class HobbyModel(BaseModel):
@@ -105,27 +87,15 @@ class UpdateMeModel(BaseModel):
     email: Optional[str] = None
 
 
-# class SkillModel(BaseModel):
-#     name: str = Field(...)
-#     image: str = Field(...)
-#
-#
-# class SkillsCategoryModel(BaseModel):
-#     Software_Development_Tools: Dict[str, SkillModel] = Field(...)
-#     Databases: Dict[str, SkillModel] = Field(...)
-#     Programming_Languages: Dict[str, SkillModel] = Field(...)
-#     Frameworks: Dict[str, SkillModel] = Field(...)
-#     Operating_Systems: Dict[str, SkillModel] = Field(...)
-#     Cloud_based_productivity_tools: Dict[str, SkillModel] = Field(...)
-#
-#
-# class UpdateSkillsCategoryModel(BaseModel):
-#     Software_Development_Tools: Optional[Dict[str, SkillModel]] = None
-#     Databases: Optional[Dict[str, SkillModel]] = None
-#     Programming_Languages: Optional[Dict[str, SkillModel]] = None
-#     Frameworks: Optional[Dict[str, SkillModel]] = None
-#     Operating_Systems: Optional[Dict[str, SkillModel]] = None
-#     Cloud_based_productivity_tools: Optional[Dict[str, SkillModel]] = None
+class SkillModel(BaseModel):
+    skillId: Optional[str] = None
+    name: str = Field(...)
+    imageLink: str = Field(...)
+
+
+class UpdateSkillsModel(BaseModel):
+    name: Optional[str] = None
+    imageLink: Optional[str] = None
 
 
 class ProjectCollection(BaseModel):
@@ -142,13 +112,13 @@ class ExperienceCollection(BaseModel):
     experiences: List[ExperienceModel]
 
 
-class CommentCollection(BaseModel):
-    comments: List[CommentModel]
+class TestimonialCollection(BaseModel):
+    testimonials: List[TestimonialModel]
 
 
 class MeCollection(BaseModel):
     me: List[MeModel]
 
 
-# class SkillsCollection(BaseModel):
-#     skills: List[SkillsCategoryModel]
+class SkillCollection(BaseModel):
+    skills: List[SkillModel]
