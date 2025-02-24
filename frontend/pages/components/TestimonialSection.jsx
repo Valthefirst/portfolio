@@ -54,7 +54,7 @@ const TestimonialSection = () => {
     const handleSubmitTestimonial = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8000/testimonials', {
+            const response = await fetch('https://portfolio-u292.onrender.com/testimonials', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ const TestimonialSection = () => {
         try {
             const token = sessionStorage.getItem('token');
             const response = await fetch(
-                `http://localhost:8000/testimonials/${testimonialId}`,
+                `https://portfolio-u292.onrender.com/testimonials/${testimonialId}`,
                 {
                     method: 'DELETE',
                     headers: {
@@ -115,7 +115,7 @@ const TestimonialSection = () => {
             };
 
             const response = await fetch(
-                `http://localhost:8000/testimonials/${testimonialId}`,
+                `https://portfolio-u292.onrender.com/testimonials/${testimonialId}`,
                 {
                     method: 'PUT',
                     headers: {
