@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import { AiFillLinkedin, AiFillGithub, AiFillMail } from "react-icons/ai";
+import emailjs from '@emailjs/browser';
 
 const EmailSection = () => {
   const { t, ready } = useTranslation();
@@ -102,33 +103,26 @@ const EmailSection = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = {
-      email: e.target.email.value,
-      subject: e.target.subject.value,
-      message: e.target.message.value,
-    };
-    const JSONdata = JSON.stringify(data);
-    const endpoint = "/api/send/route";
-    console.log(process.env.MAIL_USERNAME, process.env.MAIL_PASSWORD);
 
-    // Form the request for sending data to the server.
-    const options = {
-      // The method is POST because we are sending data.
-      method: "POST",
-      // Tell the server we're sending JSON.
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // Body of the request is the JSON data we created above.
-      body: JSONdata,
-    };
+    const serviceID = process.env.EMAILJS_SERVICE_ID;
+    const templateID = process.env.EMAILJS_TEMPLATE_ID;
+    const userID = process.env.EMAILJS_PUBLIC_KEY;
 
-    const response = await fetch(endpoint, options);
-    const resData = await response.json();
+    try {
+      const emailParams = {
+        name: e.target.name.value,
+        email: e.target.email.value,
+        subject: e.target.subject.value,
+        message: e.target.message.value,
+      };
 
-    if (response.status === 200) {
-      console.log("Message sent.");
-      setEmailSubmitted(true);
+      const res = await emailjs.send(serviceID, templateID, emailParams, userID);
+
+      if (res.status === 200) {
+        setEmailSubmitted(true);
+      }
+    } catch (error) {
+      console.error("Failed to send message. Please try again later.");
     }
   };
 
@@ -147,12 +141,37 @@ const EmailSection = () => {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input type="email" name="email" id="email" required placeholder={t('emailSection.placeholderEmail')} autoComplete="email"
-                className="form-input w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:border-blue-500 focus:outline-none dark:bg-gray-700 dark:text-white" />
-              <input type="text" name="subject" id="subject" required placeholder={t('emailSection.placeholderSubject')}
-                className="form-input w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:border-blue-500 focus:outline-none dark:bg-gray-700 dark:text-white" />
+              <input
+                type="text"
+                name="name"
+                id="name"
+                required
+                placeholder={t('emailSection.placeholderName')}
+                autoComplete="name"
+                className="form-input w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:border-blue-500 focus:outline-none dark:bg-gray-700 dark:text-white"
+              />
+              <input
+                type="email"
+                name="email"
+                id="email"
+                required
+                placeholder={t('emailSection.placeholderEmail')}
+                autoComplete="email"
+                className="form-input w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:border-blue-500 focus:outline-none dark:bg-gray-700 dark:text-white"
+              />
+              <input
+                type="text"
+                name="subject"
+                id="subject"
+                required placeholder={t('emailSection.placeholderSubject')}
+                className="form-input w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:border-blue-500 focus:outline-none dark:bg-gray-700 dark:text-white"
+              />
             </div>
-            <textarea name="message" id="message" rows="4" required placeholder={t('emailSection.placeholderMessage')}
+            <textarea
+              name="message"
+              id="message"
+              rows="4"
+              required placeholder={t('emailSection.placeholderMessage')}
               className="form-input w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:border-blue-500 focus:outline-none dark:bg-gray-700 dark:text-white"></textarea>
             <button type="submit"
               className="w-full md:w-auto px-6 py-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white transition duration-150 ease-in-out">

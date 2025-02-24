@@ -95,19 +95,6 @@ async def load_project_data():
             "descriptions": [
                 "Helped system users of Saint-Mary's Hospital with technical issues and provided support."
             ]
-        },
-        {
-            "experienceId": "f8d91257-fc69-40ca-8940-93350747330e",
-            "title": "Fast Food Worker",
-            "company": "La Ronde",
-            "location": "Montreal, QC",
-            "date": "August 2021 - Present",
-            "descriptions": [
-                "Take orders and serve clients in a fast paced environment.",
-                "Process orders with computerized cash registers.",
-                "Train new employees on the menu and customer service.",
-                "Guide, inform and answer questions from visitors."
-            ]
         }
     ]
 
