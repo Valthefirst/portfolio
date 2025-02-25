@@ -265,6 +265,24 @@ async def update_me(request: Request, me: models.MeModel):
     return updated_me
 
 
+@router.get("/resumes",
+            response_description="Get resumes",
+            response_model=models.ResumeModel,
+            response_model_by_alias=False)
+async def list_resumes():
+    return await main.resumes_collection.find_one()
+
+
+@router.put("/resumes",
+            response_description="Update resumes",
+            response_model=models.ResumeModel,
+            response_model_by_alias=False)
+async def update_resumes(request: Request, resume: models.ResumeModel):
+    await verify_token(request)
+    updated_resume = await main.resumes_collection.find_one_and_update({}, {"$set": resume.dict()})
+    return updated_resume
+
+
 @router.get("/skills/software-dev-tools",
             response_description="List all skills",
             response_model=models.SkillCollection,

@@ -57,6 +57,7 @@ projects_collection = db["projects"]
 testimonials_collection = db.get_collection("testimonials")
 experiences_collection = db.get_collection("experiences")
 me_collection = db.get_collection("me")
+resumes_collection = db.get_collection("resumes")
 # skills_collection = db.get_collection("skills")
 skills_software_dev_tools_collection = db.get_collection("skills_software_dev_tools")
 skills_database_collection = db.get_collection("skills_database")

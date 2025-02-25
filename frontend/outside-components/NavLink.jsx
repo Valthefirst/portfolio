@@ -1,13 +1,23 @@
-import Link from "next/link";
+const NavLink = ({ href, title, className }) => {
+  const handleClick = (e) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
 
-const NavLink = ({ href, title }) => {
   return (
-    <Link
+    <a
       href={href}
-      className="block py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 hover:text-white"
+      onClick={handleClick}
+      className={`block py-2 pl-3 pr-4 text-gray-900 dark:text-white sm:text-xl rounded md:p-0 ${className}`}
     >
       {title}
-    </Link>
+    </a>
   );
 };
 

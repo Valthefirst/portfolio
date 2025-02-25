@@ -173,6 +173,7 @@ const WorkExperience = () => {
               <div className="timeline-content bg-white dark:bg-gray-800 rounded-lg p-4 hover:scale-105 transition-transform duration-300 ease-in-out shadow-lg">
                 <div data-translate className="font-bold dark:text-white">{experience.date}</div>
                 <div className="font-semibold dark:text-gray-300">{experience.company}</div>
+                <div data-translate className="font-medium dark:text-gray-400">{experience.location}</div>
                 <div data-translate className="font-medium dark:text-gray-400">{experience.title}</div>
                 <ul className="list-disc list-inside dark:text-gray-200">
                   {experience.descriptions.map((description, index) => (

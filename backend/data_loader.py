@@ -12,6 +12,7 @@ projects_collection = db["projects"]
 testimonials_collection = db.get_collection("testimonials")
 experiences_collection = db.get_collection("experiences")
 me_collection = db.get_collection("me")
+resumes_collection = db.get_collection("resumes")
 # skills_collection = db.get_collection("skills")
 skills_software_dev_tools_collection = db.get_collection("skills_software_dev_tools")
 skills_database_collection = db.get_collection("skills_database")
@@ -35,7 +36,7 @@ async def load_project_data():
         {
             "projectId": "5a5d14d9-5c46-4962-a52e-1a6bf56046e8",
             "name": "League Alerts",
-            "description": "A portfolio website that showcases my projects and skills.",
+            "description": "In a team of 4, designed and developed a full-stack articles web application for League Alerts Inc.",
             "date": "September 2024 - February 2025",
             "link": "https://league-alerts.web.app",
             # "image": "d"
@@ -48,15 +49,15 @@ async def load_project_data():
         #     "link": "x.com",
         #     # "image": "d"
         # },
-        {
-            "projectId": "184181c4-2ecd-4663-8c71-7cc105ab759d",
-            "name": "Library Management System",
-            "description": "A web service for a library management platform that allows users to borrow and return "
-                           "books.",
-            "date": "February 2024 - May 2024",
-            "link": "https://github.com/Valthefirst/library-management-system",
-            # "image": "d"
-        },
+        # {
+        #     "projectId": "184181c4-2ecd-4663-8c71-7cc105ab759d",
+        #     "name": "Library Management System",
+        #     "description": "A web service for a library management platform that allows users to borrow and return "
+        #                    "books.",
+        #     "date": "February 2024 - May 2024",
+        #     "link": "https://github.com/Valthefirst/library-management-system",
+        #     # "image": "d"
+        # },
         {
             "projectId": "bd6884f3-26da-4227-bd5b-512123e140ee",
             "name": "Personal Library Manager Application",
@@ -121,6 +122,13 @@ async def load_project_data():
             "github": "https://github.com/Valthefirst",
             "linkedin": "https://www.linkedin.com/in/valentine-nneji/",
             "email": "ama.val@live.ca",
+        }
+    ]
+
+    resumes = [
+        {
+            "english": "https://pdflink.to/4ef63d0b/",
+            "french": "https://pdflink.to/ad166957/"
         }
     ]
 
@@ -285,6 +293,10 @@ async def load_project_data():
     for experience in experience:
         await experiences_collection.update_one({"experienceId": experience["experienceId"]}, {"$set": experience},
                                                 upsert=True)
+
+    # Upsert resume (update if exists, insert if not)
+    for resume in resumes:
+        await resumes_collection.update_one({}, {"$set": resume}, upsert=True)
 
     # Upsert skills_software_dev_tools (update if exists, insert if not)
     for skill in skills_software_dev_tools:

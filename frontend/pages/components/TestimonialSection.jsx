@@ -9,6 +9,8 @@ const TestimonialSection = () => {
         name: '',
         content: ''
     });
+    const [testimonialSubmitted, setTestimonialSubmitted] = useState(false);
+
 
     useEffect(() => {
         const fetchTestimonials = async () => {
@@ -69,6 +71,7 @@ const TestimonialSection = () => {
                 const data = await response.json();
                 setTestimonials(prev => [...prev, data]);
                 setNewTestimonial({ name: '', content: '' });
+                setTestimonialSubmitted(true);
             }
         } catch (error) {
             console.error("Error submitting testimonial:", error);
@@ -200,44 +203,54 @@ const TestimonialSection = () => {
             </div>
 
             <div className="max-w-2xl mx-auto">
-                <form onSubmit={handleSubmitTestimonial} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                    <div className="mb-4">
-                        <label htmlFor="name" data-translate className="block text-gray-700 dark:text-gray-300 mb-2">
-                            Name
-                        </label>
-                        <input
-                            type="text"
-                            id="name"
-                            value={newTestimonial.name}
-                            onChange={(e) => setNewTestimonial(prev => ({ ...prev, name: e.target.value }))}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
-                                     dark:bg-gray-700 dark:text-white focus:outline-none focus:border-blue-500"
-                            autoComplete="name"
-                            required
-                        />
+                {testimonialSubmitted ? (
+                    <div className="text-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                        <p className="text-lg font-semibold text-green-500">
+                            Thank you for your testimonial!
+                        </p>
                     </div>
-                    <div className="mb-4">
-                        <label htmlFor="content" data-translate className="block text-gray-700 dark:text-gray-300 mb-2">
-                            Testimonial
-                        </label>
-                        <textarea
-                            id="content"
-                            value={newTestimonial.content}
-                            onChange={(e) => setNewTestimonial(prev => ({ ...prev, content: e.target.value }))}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
+                ) : (
+                    <form onSubmit={handleSubmitTestimonial} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <div className="mb-4">
+                            <label htmlFor="name" data-translate className="block text-gray-700 dark:text-gray-300 mb-2">
+                                Name
+                            </label>
+                            <input
+                                type="text"
+                                id="name"
+                                value={newTestimonial.name}
+                                onChange={(e) => setNewTestimonial(prev => ({ ...prev, name: e.target.value }))}
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
                                      dark:bg-gray-700 dark:text-white focus:outline-none focus:border-blue-500"
-                            rows="4"
-                            required
-                        ></textarea>
-                    </div>
-                    <button
-                        type="submit"
-                        data-translate
-                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
-                    >
-                        Submit Testimonial
-                    </button>
-                </form>
+                                autoComplete="name"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label htmlFor="content" data-translate className="block text-gray-700 dark:text-gray-300 mb-2">
+                                Testimonial
+                            </label>
+                            <textarea
+                                id="content"
+                                value={newTestimonial.content}
+                                onChange={(e) => setNewTestimonial(prev => ({ ...prev, content: e.target.value }))}
+                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md 
+                                     dark:bg-gray-700 dark:text-white focus:outline-none focus:border-blue-500"
+                                rows="4"
+                                required
+                            ></textarea>
+                        </div>
+                        <div className="flex justify-center">
+                            <button
+                                type="submit"
+                                data-translate
+                                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+                            >
+                                Submit Testimonial
+                            </button>
+                        </div>
+                    </form>
+                )}
             </div>
         </section>
     );

@@ -1,5 +1,4 @@
-import { BsFillCloudMoonFill } from 'react-icons/bs'
-import { Suspense, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import AboutSection from "./components/AboutSection";
 import ProjectsSection from "./components/ProjectsSection";
@@ -15,6 +14,7 @@ import TestimonialSection from './components/TestimonialSection';
 
 export default function Home() {
   const [lightMode, setLightMode] = useState(false);
+
   const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {

@@ -87,6 +87,16 @@ class UpdateMeModel(BaseModel):
     email: Optional[str] = None
 
 
+class ResumeModel(BaseModel):
+    english: str = Field(...)
+    french: str = Field(...)
+
+
+class UpdateResumeModel(BaseModel):
+    english: Optional[str] = None
+    french: Optional[str] = None
+
+
 class SkillModel(BaseModel):
     skillId: Optional[str] = None
     name: str = Field(...)
@@ -114,10 +124,6 @@ class ExperienceCollection(BaseModel):
 
 class TestimonialCollection(BaseModel):
     testimonials: List[TestimonialModel]
-
-
-class MeCollection(BaseModel):
-    me: List[MeModel]
 
 
 class SkillCollection(BaseModel):
