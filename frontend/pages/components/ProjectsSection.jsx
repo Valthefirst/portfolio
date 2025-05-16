@@ -140,7 +140,7 @@ const ProjectsSection = () => {
               className="transition duration-200 ease-in-out transform hover:-translate-y-1 shadow-lg hover:shadow-xl rounded-lg overflow-hidden bg-white dark:bg-gray-800 p-6"
             >
               <h3 data-translate className="text-xl font-semibold text-gray-800 dark:text-white">{project.name}</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">{project.date}</p>
+              <p data-translate className="text-sm text-gray-600 dark:text-gray-300 mt-2">{project.date}</p>
               <p data-translate className="text-sm text-gray-600 dark:text-gray-300 mt-2">{project.description}</p>
               {project.link && (
                 <a
@@ -149,7 +149,9 @@ const ProjectsSection = () => {
                   rel="noopener noreferrer"
                   className="inline-block mt-4 text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-600"
                 >
+                  <div  data-translate>
                   Project Link
+                  </div>
                 </a>
               )}
               {isLoggedIn && (

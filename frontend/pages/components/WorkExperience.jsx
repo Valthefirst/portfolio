@@ -162,7 +162,7 @@ const WorkExperience = () => {
 
   return (
     <section id="work" className="py-12 px-4 mb-6">
-      <h2 className="text-center text-4xl font-bold text-gray-800 dark:text-white mt-4 mb-8">
+      <h2 data-translate className="text-center text-4xl font-bold text-gray-800 dark:text-white mt-4 mb-8">
         Work Experience
       </h2>
       <div className="container mx-auto">

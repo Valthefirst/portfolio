@@ -38,7 +38,7 @@ async def load_project_data():
             "name": "League Alerts",
             "description": "In a team of 4, designed and developed a full-stack articles web application for League Alerts Inc.",
             "date": "September 2024 - February 2025",
-            "link": "https://league-alerts.web.app",
+            "link": "https://league-alerts.web.app/home",
             # "image": "d"
         },
         # {
